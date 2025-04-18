@@ -3,15 +3,6 @@
 
 This is my practice project developed in **Unity 6** to practice advanced Unity features:
 
-- ✅ Zenject (Dependency Injection)
-- ✅ UniTask (Async)
-- ✅ Unity UI Toolkit
-- ✅ New Input System
-- ✅ Addressables
-- ✅ Unity Playables
-- ✅ HLSL Shader Showcase
-- ✅ Mobile Swipe/Tap Controls
-
 ---
 
 ### 🎮 Game Overview
@@ -23,6 +14,16 @@ Player auto-runs forward. Tap & swipe controls allow:
 - Stops movement if no touch is detected.
 
 ---
+
+- ✅ Zenject (Dependency Injection)
+- ✅ UniTask (Async)
+- ✅ Unity UI Toolkit
+- ✅ New Input System
+- ✅ Addressables
+- ✅ Unity Playables
+- ✅ HLSL Shader Showcase
+- ✅ Mobile Swipe/Tap Controls
+
 
 ### 📂 Tech Stack
 
