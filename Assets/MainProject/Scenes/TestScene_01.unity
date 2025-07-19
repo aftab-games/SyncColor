@@ -427,7 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 979c79711f608284db1f2b9983b5926f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followAxis: {x: 1, y: 1, z: 1}
+  followAxis: {x: 0, y: 1, z: 1}
   followSpeed: {x: 1, y: 1, z: 1}
   lookSpeed: 1
   cameraFollowSmoothType: 0
@@ -1065,8 +1065,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 555cc311906d4b04cb23714558bb4d8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _forwardSpeed: 1
-  _sideSpeed: 1
+  _forwardSpeed: 5
+  _sideSpeed: 10
   _canMove: 1
 --- !u!54 &1869699325
 Rigidbody:
