@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GroundMat
+  m_Name: GreenMat
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -115,8 +115,8 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.7509433, g: 0.7509433, b: 0.7509433, a: 1}
-    - _Color: {r: 0.7509433, g: 0.7509433, b: 0.7509433, a: 1}
+    - _BaseColor: {r: 0.09803921, g: 0.7294118, b: 0.3200793, a: 1}
+    - _Color: {r: 0.09803919, g: 0.7294118, b: 0.32007927, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
