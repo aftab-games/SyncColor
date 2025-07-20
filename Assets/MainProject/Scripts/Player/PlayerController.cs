@@ -5,26 +5,31 @@ namespace Aftab
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour
     {
+        [Header("Movement Settings")]
+        [SerializeField]
+        bool _canMove = false;
         [SerializeField]
         float _forwardSpeed = 1.0f;
         [SerializeField]
         float _sideSpeed = 10.0f;
-
         float _laneDistance = 2.5f;
-
         int _currentLane = 1; // 0 = Left, 1 = Center, 2 = Right
-
         Vector3 _targetPosition = Vector3.zero;
-
-        [SerializeField]
-        bool _canMove = false;
         Rigidbody _rb;
         Vector3 _targetVelocity = Vector3.zero;
 
-        void Start()
+        [Header("Color Settings")]
+        [SerializeField]
+        Renderer playerRenderer;
+        [SerializeField]
+        Color playerColor;
+
+        void Awake()
         {
             _rb = GetComponent<Rigidbody>();
+            SetPlayerColor(playerColor);
         }
+
         void Update()
         {
             ManageInput();
@@ -58,7 +63,7 @@ namespace Aftab
             }
         }
 
-        private void ChangeLane(int direction)
+        void ChangeLane(int direction)
         {
             _currentLane = Mathf.Clamp(_currentLane + direction, 0, 2);
             float newX = (_currentLane - 1) * _laneDistance;
@@ -73,6 +78,20 @@ namespace Aftab
                 new Vector3(_targetPosition.x, transform.position.y, transform.position.z),
                 Time.deltaTime * _sideSpeed);
             transform.position = newPosition;
+        }
+
+        void SetPlayerColor(Color newColor)
+        {
+            playerColor = newColor;
+            if (playerRenderer != null)
+            {
+                playerRenderer.material.color = playerColor;
+            }
+        }
+
+        public Color GetPlayerColor()
+        {
+            return playerColor;
         }
     }
 }

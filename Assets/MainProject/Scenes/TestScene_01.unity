@@ -666,7 +666,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &752719670
 Transform:
   m_ObjectHideFlags: 0
@@ -1227,9 +1227,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 555cc311906d4b04cb23714558bb4d8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canMove: 1
   _forwardSpeed: 5
   _sideSpeed: 10
-  _canMove: 1
+  playerRenderer: {fileID: 745201490}
+  playerColor: {r: 0.9568628, g: 0.5686275, b: 0.19215688, a: 1}
 --- !u!54 &1869699325
 Rigidbody:
   m_ObjectHideFlags: 0
