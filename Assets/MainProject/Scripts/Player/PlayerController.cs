@@ -32,7 +32,8 @@ namespace Aftab
 
         void Update()
         {
-            ManageInput();
+            if(GameManager.Instance.IsLevelCompleted || GameManager.Instance.IsLevelCompleted) return;
+            ManageInput(); //This needs to be moved to InputManager script
             ManageSideWiseMovement();
         }
 
@@ -60,6 +61,22 @@ namespace Aftab
             else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
             {
                 ChangeLane(1);
+            }
+
+            if(GameManager.Instance.IsAllowedInputForGateOpening)
+            {
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.R);
+                }
+                else if(Input.GetKeyDown(KeyCode.G))
+                {
+                    GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.G);
+                }
+                else if(Input.GetKeyDown(KeyCode.B))
+                {
+                    GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.B);
+                }
             }
         }
 
@@ -89,10 +106,59 @@ namespace Aftab
             }
         }
 
+        
+
+        void BallAnimationAtStart()
+        {
+            //Have a nice and smooth animation at the start.
+            //Animaiton will continue before player start the game.
+        }
+
+        void BreakBodyIntoPieces()
+        {
+            //Play an Fx
+            //Deactivate current body
+            //Activate pieces
+            //Activate rigidbody of broken pieces
+        }
+
+        void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Gate")) //Activator is trigger
+            {
+                if(other.TryGetComponent<ColorGate>(out ColorGate colorGate))
+                {
+                    Debug.Log("Gate Triggered");
+                    colorGate.ActivateGate();
+                }
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            //TODO: Add obstacles in the path. Will implement Jump to avoid obstacles which can be avoided by jumping
+            //Will have a screen shake
+            if (collision.gameObject.CompareTag("Gate")) //Main gate is collider
+            {
+                Debug.Log("Gate Hit");
+                BreakBodyIntoPieces();
+                //Send a message to Game manager
+                GameManager.Instance.PlayerCollideWithGate();
+            }
+        }
+
         public Color GetPlayerColor()
         {
             return playerColor;
         }
     }
 }
-
+/*
+bool IsColorMatch(Color a, Color b)
+{
+    float tolerance = 0.1f;
+    return Mathf.Abs(a.r - b.r) < tolerance &&
+           Mathf.Abs(a.g - b.g) < tolerance &&
+           Mathf.Abs(a.b - b.b) < tolerance;
+}
+*/
