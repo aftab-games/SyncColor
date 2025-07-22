@@ -400,7 +400,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &210132141
 Transform:
   m_ObjectHideFlags: 0
@@ -1263,7 +1263,7 @@ MonoBehaviour:
   _forwardSpeed: 5
   _sideSpeed: 10
   playerRenderer: {fileID: 745201490}
-  playerColor: {r: 0.050980393, g: 0.8, b: 0.9019608, a: 1}
+  playerColor: {r: 0.16470589, g: 0.4, b: 0.72156864, a: 1}
 --- !u!54 &1869699325
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1313,6 +1313,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1954059112}
   - component: {fileID: 1954059113}
+  - component: {fileID: 1954059115}
+  - component: {fileID: 1954059114}
   m_Layer: 0
   m_Name: GateBoxRed
   m_TagString: Gate
@@ -1355,8 +1357,37 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 15, y: 10, z: 5}
-  m_Center: {x: 0, y: 0, z: -10}
+  m_Size: {x: 15, y: 10, z: 10}
+  m_Center: {x: 0, y: 0, z: -7}
+--- !u!114 &1954059114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954059111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1da0039d5fee9c4693060e8a45cad2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1954059115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954059111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2677e5240f45f6142bf0fe8747cf11b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gateColor: {r: 0.72156864, g: 0.20392157, b: 0.20392157, a: 1}
+  _renderer: {fileID: 865721170}
+  _gateActivatorTrigger: {fileID: 1954059113}
+  _gateCollider: {fileID: 865721169}
+  _gateTransform: {fileID: 865721168}
 --- !u!1 &2109931035
 GameObject:
   m_ObjectHideFlags: 0
