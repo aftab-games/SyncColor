@@ -1,5 +1,5 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Aftab
 {
@@ -20,8 +20,6 @@ namespace Aftab
         {
             Instance = this;
         }
-
-        
 
         public void ManageAllowingGateOpening(bool allow, ColorGate colorGate)
         {
@@ -67,6 +65,7 @@ namespace Aftab
             _isAllowedInputForGateOpening = false;
             //Open an UI panel
             //Open next button
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //Reloading the scene at this moment
         }
 
         void ManageLevelFailed()
@@ -75,6 +74,7 @@ namespace Aftab
             _isAllowedInputForGateOpening = false;
             //Open an UI panel
             //Open retry button
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //Reloading the scene at this moment
         }
     }
 }
