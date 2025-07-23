@@ -132,6 +132,10 @@ namespace Aftab
                     colorGate.ActivateGate();
                 }
             }
+            else if(other.gameObject.CompareTag("LevelEnd"))
+            {
+                GameManager.Instance.PlayerReachedAtLevelEnd();
+            }
         }
 
         private void OnCollisionEnter(Collision collision)
