@@ -23,6 +23,8 @@ namespace Aftab
         Renderer playerRenderer;
         [SerializeField]
         Color playerColor;
+        bool isMatchedColor = false;
+        Color matchedColor = Color.white;
 
         void Awake()
         {
@@ -65,17 +67,24 @@ namespace Aftab
 
             if(GameManager.Instance.IsAllowedInputForGateOpening)
             {
+                isMatchedColor = false;
+                matchedColor = Color.white;
                 if (Input.GetKeyDown(KeyCode.R))
                 {
-                    GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.R);
+                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.R, out matchedColor);
                 }
                 else if(Input.GetKeyDown(KeyCode.G))
                 {
-                    GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.G);
+                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.G,out matchedColor);
                 }
                 else if(Input.GetKeyDown(KeyCode.B))
                 {
-                    GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.B);
+                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.B, out matchedColor);
+                }
+
+                if(isMatchedColor)
+                {
+                    SetPlayerColor(matchedColor);
                 }
             }
         }
