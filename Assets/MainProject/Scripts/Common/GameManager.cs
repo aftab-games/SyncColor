@@ -30,13 +30,19 @@ namespace Aftab
             //Or, Open a UI panel with button showing different color.
         }
 
-        public void CheckInputWithCurrentGateColorCode(GateColorCode colorCode)
+        public bool CheckInputWithCurrentGateColorCode(GateColorCode colorCode, out Color matchedGateColor)
         {
-            if(colorCode == _currentColorGate.ThisGateColorCode)
+            matchedGateColor = Color.white;
+            bool isMatched = false;
+            if (colorCode == _currentColorGate.ThisGateColorCode)
             {
                 //Matched the color code
+                matchedGateColor = _currentColorGate.ThisGateColor;
                 OpenCurrentGate();
+                ResetGateOpeningAndCurrentColorGate();
+                isMatched = true;
             }
+            return isMatched;
         }
 
         void OpenCurrentGate()
@@ -44,6 +50,11 @@ namespace Aftab
             //Disable instruction UI
             //Give an imoji effect along with a vfx effect, may be
             if(_currentColorGate != null) _currentColorGate.OpenGate(); //TODO: Need to solve this. I mean decouple this. And implement Zenject
+            
+        }
+
+        void ResetGateOpeningAndCurrentColorGate()
+        {
             _isAllowedInputForGateOpening = false;
             _currentColorGate = null;
         }
