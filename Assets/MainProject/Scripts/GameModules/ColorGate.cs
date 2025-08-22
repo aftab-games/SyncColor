@@ -23,6 +23,7 @@ namespace Aftab
         Transform _gateTransform;
 
         public GateColorCode ThisGateColorCode => _gateColorCode;
+        public Color ThisGateColor => _gateColor;
 
         void Start()
         {
