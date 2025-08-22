@@ -5,8 +5,9 @@ namespace Aftab
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour
     {
+        public static PlayerController Instance { get; private set; }
         [Header("Movement Settings")]
-        [SerializeField]
+        //[SerializeField]
         bool _canMove = false;
         [SerializeField]
         float _forwardSpeed = 1.0f;
@@ -25,11 +26,28 @@ namespace Aftab
         Color playerColor;
         bool isMatchedColor = false;
         Color matchedColor = Color.white;
-
+        
         void Awake()
         {
+            Instance = this;
+            _canMove = false;
             _rb = GetComponent<Rigidbody>();
             SetPlayerColor(playerColor);
+        }
+
+        void Start()
+        {
+            GameManager.Instance.OnGameStarted += ManageOnGameStarted;
+        }
+
+        void OnDisable()
+        {
+            GameManager.Instance.OnGameStarted -= ManageOnGameStarted;
+        }
+
+        void ManageOnGameStarted()
+        {
+            _canMove = true;
         }
 
         void Update()
@@ -125,7 +143,8 @@ namespace Aftab
 
         void BreakBodyIntoPieces()
         {
-            //Play an Fx
+            //TODO: Need to implement ball break system.
+            //At this moment we will just show some cube scattering orginated from the ball and deactivate the ball mesh
             //Deactivate current body
             //Activate pieces
             //Activate rigidbody of broken pieces
@@ -143,21 +162,30 @@ namespace Aftab
             }
             else if(other.gameObject.CompareTag("LevelEnd"))
             {
+                _canMove = false;
+                StopBallRigidBody();
                 GameManager.Instance.PlayerReachedAtLevelEnd();
             }
         }
 
-        private void OnCollisionEnter(Collision collision)
+        void OnCollisionEnter(Collision collision)
         {
             //TODO: Add obstacles in the path. Will implement Jump to avoid obstacles which can be avoided by jumping
             //Will have a screen shake
             if (collision.gameObject.CompareTag("Gate")) //Main gate is collider
             {
                 Debug.Log("Gate Hit");
+                StopBallRigidBody();
                 BreakBodyIntoPieces();
                 //Send a message to Game manager
                 GameManager.Instance.PlayerCollideWithGate();
             }
+        }
+
+        void StopBallRigidBody()
+        {
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
         }
 
         public Color GetPlayerColor()

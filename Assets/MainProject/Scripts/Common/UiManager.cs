@@ -1,5 +1,7 @@
+using DG.Tweening.Core.Easing;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Aftab
@@ -8,19 +10,18 @@ namespace Aftab
     {
         [Header("Settings:")]
         [SerializeField]
-        GameObject lvlCompletePanelGO, lvlFailedPanelGO;
+        GameObject lvlCompletePanelGO;
+        [SerializeField]
+        GameObject lvlFailedPanelGO;
         [SerializeField]
         Button startGameBtn, nextLvlBtn, retryBtn;
-
-        public static UiManager Instance {  get; private set; }
-
-        void Awake()
-        {
-            Instance = this;
-        }
+        GameManager gameManager;
 
         void Start()
         {
+            gameManager = GameManager.Instance;
+            gameManager.OnLvlCompleted += ActivateLvlCompletedPanel;
+            gameManager.OnLvlFailed += ActivateLvlFailedPanel;
             startGameBtn.onClick.AddListener(ManageTappedStartGameBtn);
             nextLvlBtn.onClick.AddListener (ManageTappedNextLvlBtn);
             retryBtn.onClick.AddListener (ManageTappedRetryBtn);
@@ -28,21 +29,34 @@ namespace Aftab
 
         void OnDisable()
         {
+            gameManager.OnLvlCompleted -= ActivateLvlCompletedPanel;
+            gameManager.OnLvlFailed -= ActivateLvlFailedPanel;
             startGameBtn.onClick.RemoveAllListeners();
             nextLvlBtn.onClick.RemoveAllListeners();
             retryBtn.onClick.RemoveAllListeners();
         }
         void ManageTappedStartGameBtn()
         {
-
+            startGameBtn.gameObject.SetActive(false);
+            GameManager.Instance.ManageGameStarted();
         }
         void ManageTappedNextLvlBtn()
         {
-
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //TODO: Reloading the scene at this moment.Need to fix this
         }
         void ManageTappedRetryBtn()
         {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
 
+        void ActivateLvlCompletedPanel()
+        {
+            lvlCompletePanelGO.SetActive(true);
+        }
+
+        void ActivateLvlFailedPanel()
+        {
+            lvlFailedPanelGO.SetActive(true);
         }
     }
 }

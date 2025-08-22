@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,9 +17,16 @@ namespace Aftab
         public bool IsLevelFailed => _isLevelFailed;
         public bool IsAllowedInputForGateOpening => _isAllowedInputForGateOpening;
 
+        public event Action OnGameStarted, OnLvlCompleted, OnLvlFailed;
+
         void Awake()
         {
             Instance = this;
+        }
+
+        public void ManageGameStarted()
+        {
+            OnGameStarted?.Invoke();
         }
 
         public void ManageAllowingGateOpening(bool allow, ColorGate colorGate)
@@ -74,10 +82,7 @@ namespace Aftab
         {
             _isLevelCompleted = true;
             _isAllowedInputForGateOpening = false;
-            //Play fx
-            //Open an UI panel
-            //Open next button
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //Reloading the scene at this moment
+            OnLvlCompleted?.Invoke();
         }
 
         void ManageLevelFailed()
@@ -86,9 +91,7 @@ namespace Aftab
             _isAllowedInputForGateOpening = false;
             //Camshake
             //Destroy ball. Make ball broken in pieces
-            //Open an UI panel
-            //Open retry button
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //Reloading the scene at this moment
+            OnLvlFailed?.Invoke();
         }
     }
 }
