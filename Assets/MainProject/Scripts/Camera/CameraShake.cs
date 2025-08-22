@@ -5,13 +5,28 @@ namespace Aftab
 {
     public class CameraShake : MonoBehaviour
     {
-        public static CameraShake Instance { get; private set; }
-
+        [Header("Settings:")]
+        [SerializeField]
+        float duration;
+        [SerializeField]
+        float magnitude;
         Coroutine runningCoroutine;
 
-        void Awake() => Instance = this;
+        void Start()
+        {
+            GameManager.Instance.OnLvlFailed += ManageShakeCamera;
+        }
+        void OnDisable()
+        {
+            GameManager.Instance.OnLvlFailed -= ManageShakeCamera;
+        }
 
-        public void ShakeTheCamera(float _duration, float _magnitude)
+        void ManageShakeCamera()
+        {
+            ShakeTheCamera(duration, magnitude);
+        }
+
+        void ShakeTheCamera(float _duration, float _magnitude)
         {
             if (runningCoroutine != null) StopCoroutine(runningCoroutine);
             runningCoroutine = StartCoroutine(Shake(_duration, _magnitude));
