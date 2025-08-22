@@ -74,6 +74,7 @@ namespace Aftab
         {
             _isLevelCompleted = true;
             _isAllowedInputForGateOpening = false;
+            //Play fx
             //Open an UI panel
             //Open next button
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //Reloading the scene at this moment
@@ -83,6 +84,8 @@ namespace Aftab
         {
             _isLevelFailed = true;
             _isAllowedInputForGateOpening = false;
+            //Camshake
+            //Destroy ball. Make ball broken in pieces
             //Open an UI panel
             //Open retry button
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //Reloading the scene at this moment
