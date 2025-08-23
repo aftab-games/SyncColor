@@ -14,11 +14,11 @@ namespace Aftab
 
         void Start()
         {
-            GameManager.Instance.OnLvlFailed += ManageShakeCamera;
+            GameManager.Instance.OnLevelFailed += ManageShakeCamera;
         }
         void OnDisable()
         {
-            GameManager.Instance.OnLvlFailed -= ManageShakeCamera;
+            GameManager.Instance.OnLevelFailed -= ManageShakeCamera;
         }
 
         void ManageShakeCamera()

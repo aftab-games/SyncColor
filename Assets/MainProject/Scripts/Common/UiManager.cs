@@ -20,8 +20,8 @@ namespace Aftab
         void Start()
         {
             gameManager = GameManager.Instance;
-            gameManager.OnLvlCompleted += ActivateLvlCompletedPanel;
-            gameManager.OnLvlFailed += ActivateLvlFailedPanel;
+            gameManager.OnLevelCompleted += ActivateLvlCompletedPanel;
+            gameManager.OnLevelFailed += ActivateLvlFailedPanel;
             startGameBtn.onClick.AddListener(ManageTappedStartGameBtn);
             nextLvlBtn.onClick.AddListener (ManageTappedNextLvlBtn);
             retryBtn.onClick.AddListener (ManageTappedRetryBtn);
@@ -29,8 +29,8 @@ namespace Aftab
 
         void OnDisable()
         {
-            gameManager.OnLvlCompleted -= ActivateLvlCompletedPanel;
-            gameManager.OnLvlFailed -= ActivateLvlFailedPanel;
+            gameManager.OnLevelCompleted -= ActivateLvlCompletedPanel;
+            gameManager.OnLevelFailed -= ActivateLvlFailedPanel;
             startGameBtn.onClick.RemoveAllListeners();
             nextLvlBtn.onClick.RemoveAllListeners();
             retryBtn.onClick.RemoveAllListeners();

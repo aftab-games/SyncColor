@@ -11,14 +11,14 @@ namespace Aftab
         ParticleSystem ballBreakFx;
         void Start()
         {
-            GameManager.Instance.OnLvlCompleted += ManageLevelCompleted;
-            GameManager.Instance.OnLvlFailed += PlayBallBreakFx;
+            GameManager.Instance.OnLevelCompleted += ManageLevelCompleted;
+            GameManager.Instance.OnLevelFailed += PlayBallBreakFx;
         }
 
         void OnDisable()
         {
-            GameManager.Instance.OnLvlCompleted -= ManageLevelCompleted;
-            GameManager.Instance.OnLvlFailed -= PlayBallBreakFx;
+            GameManager.Instance.OnLevelCompleted -= ManageLevelCompleted;
+            GameManager.Instance.OnLevelFailed -= PlayBallBreakFx;
         }
         void ManageLevelCompleted()
         {

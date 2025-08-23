@@ -2,22 +2,22 @@ using UnityEngine;
 
 namespace Aftab
 {
-    [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour
     {
         public static PlayerController Instance { get; private set; }
         [Header("Movement Settings")]
-        //[SerializeField]
-        bool _canMove = false;
         [SerializeField]
-        float _forwardSpeed = 1.0f;
+        float forwardSpeed = 1.0f;
         [SerializeField]
-        float _sideSpeed = 10.0f;
-        float _laneDistance = 2.5f;
-        int _currentLane = 1; // 0 = Left, 1 = Center, 2 = Right
-        Vector3 _targetPosition = Vector3.zero;
-        Rigidbody _rb;
-        Vector3 _targetVelocity = Vector3.zero;
+        float sideSpeed = 10.0f;
+        [SerializeField]
+        Rigidbody mainBodyRB;
+        Transform mainBodyTr;
+        bool canMove = false;
+        float laneDistance = 2.5f;
+        int currentLane = 1; // 0 = Left, 1 = Center, 2 = Right
+        Vector3 targetPosition = Vector3.zero;
+        Vector3 targetVelocity = Vector3.zero;
 
         [Header("Color Settings")]
         [SerializeField]
@@ -30,24 +30,24 @@ namespace Aftab
         void Awake()
         {
             Instance = this;
-            _canMove = false;
-            _rb = GetComponent<Rigidbody>();
+            canMove = false;
+            mainBodyTr = mainBodyRB.transform;
             SetPlayerColor(playerColor);
         }
 
         void Start()
         {
-            GameManager.Instance.OnGameStarted += ManageOnGameStarted;
+            GameManager.Instance.OnLevelStarted += ManageOnGameStarted;
         }
 
         void OnDisable()
         {
-            GameManager.Instance.OnGameStarted -= ManageOnGameStarted;
+            GameManager.Instance.OnLevelStarted -= ManageOnGameStarted;
         }
 
         void ManageOnGameStarted()
         {
-            _canMove = true;
+            canMove = true;
         }
 
         void Update()
@@ -64,11 +64,11 @@ namespace Aftab
 
         void ManageForwardMovement()
         {
-            if (!_canMove) return;
-            _targetVelocity.x = _rb.linearVelocity.x;
-            _targetVelocity.y = _rb.linearVelocity.y;
-            _targetVelocity.z = _forwardSpeed;
-            _rb.linearVelocity = _targetVelocity;
+            if (!canMove) return;
+            targetVelocity.x = mainBodyRB.linearVelocity.x;
+            targetVelocity.y = mainBodyRB.linearVelocity.y;
+            targetVelocity.z = forwardSpeed;
+            mainBodyRB.linearVelocity = targetVelocity;
         }
 
         void ManageInput()
@@ -110,20 +110,19 @@ namespace Aftab
 
         void ChangeLane(int direction)
         {
-            _currentLane = Mathf.Clamp(_currentLane + direction, 0, 2);
-            float newX = (_currentLane - 1) * _laneDistance;
-            _targetPosition = new Vector3(newX, transform.position.y, transform.position.z);
+            currentLane = Mathf.Clamp(currentLane + direction, 0, 2);
+            float targetXPos = (currentLane - 1) * laneDistance;
+            targetPosition = new Vector3(targetXPos, mainBodyTr.position.y, mainBodyTr.position.z);
         }
 
 
         void ManageSideWiseMovement()
         {
-            //TODO: Polish the movement system, as the object is moving forward by rigidboy, it's sidewise movement should be determined by rigidbody too
-            if (!_canMove) return;
-            Vector3 newPosition = Vector3.Lerp(transform.position, 
-                new Vector3(_targetPosition.x, transform.position.y, transform.position.z),
-                Time.deltaTime * _sideSpeed);
-            transform.position = newPosition;
+            //TODO: Polish the movement system.
+            //As the object is moving forward by rigidboy, it's sidewise movement should be determined by rigidbody too
+            if (!canMove) return;
+            Vector3 newPosition = new Vector3(targetPosition.x, mainBodyTr.position.y, mainBodyTr.position.z);
+            mainBodyTr.position = Vector3.Lerp(mainBodyTr.position, newPosition, Time.deltaTime * sideSpeed);
         }
 
         void SetPlayerColor(Color newColor)
@@ -143,7 +142,7 @@ namespace Aftab
             //Animaiton will continue before player start the game.
         }
 
-        void BreakBodyIntoPieces()
+        public void BreakBodyIntoPieces()
         {
             //TODO: Need to implement ball break system.
             //At this moment we will just show some cube scattering orginated from the ball and deactivate the ball mesh
@@ -152,42 +151,13 @@ namespace Aftab
             //Activate rigidbody of broken pieces
         }
 
-        void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("Gate")) //Activator is trigger
-            {
-                if(other.TryGetComponent<ColorGate>(out ColorGate colorGate))
-                {
-                    Debug.Log("Gate Triggered");
-                    colorGate.ActivateGate();
-                }
-            }
-            else if(other.gameObject.CompareTag("LevelEnd"))
-            {
-                _canMove = false;
-                StopBallRigidBody();
-                GameManager.Instance.PlayerReachedAtLevelEnd();
-            }
-        }
+        
 
-        void OnCollisionEnter(Collision collision)
+        public void StopBallMovement()
         {
-            //TODO: Add obstacles in the path. Will implement Jump to avoid obstacles which can be avoided by jumping
-            //Will have a screen shake
-            if (collision.gameObject.CompareTag("Gate")) //Main gate is collider
-            {
-                Debug.Log("Gate Hit");
-                StopBallRigidBody();
-                BreakBodyIntoPieces();
-                //Send a message to Game manager
-                GameManager.Instance.PlayerCollideWithGate();
-            }
-        }
-
-        void StopBallRigidBody()
-        {
-            _rb.linearVelocity = Vector3.zero;
-            _rb.angularVelocity = Vector3.zero;
+            canMove = false;
+            mainBodyRB.linearVelocity = Vector3.zero;
+            mainBodyRB.angularVelocity = Vector3.zero;
         }
 
         public Color GetPlayerColor()

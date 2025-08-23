@@ -40,16 +40,16 @@ namespace Aftab
             initialFollowSpeed = followSpeed;
             initialLookSpeed = lookSpeed;
 
-            GameManager.Instance.OnGameStarted += ManageOnGameStarted;
-            GameManager.Instance.OnLvlCompleted += ManageOnLevelCompleted;
-            GameManager.Instance.OnLvlFailed += ManageOnLevelFailed;
+            GameManager.Instance.OnLevelStarted += ManageOnGameStarted;
+            GameManager.Instance.OnLevelCompleted += ManageOnLevelCompleted;
+            GameManager.Instance.OnLevelFailed += ManageOnLevelFailed;
         }
 
         void OnDisable()
         {
-            GameManager.Instance.OnGameStarted -= ManageOnGameStarted;
-            GameManager.Instance.OnLvlCompleted -= ManageOnLevelCompleted;
-            GameManager.Instance.OnLvlFailed -= ManageOnLevelFailed;
+            GameManager.Instance.OnLevelStarted -= ManageOnGameStarted;
+            GameManager.Instance.OnLevelCompleted -= ManageOnLevelCompleted;
+            GameManager.Instance.OnLevelFailed -= ManageOnLevelFailed;
         }
 
         void ManageOnGameStarted()

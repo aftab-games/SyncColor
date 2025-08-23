@@ -8,30 +8,30 @@ namespace Aftab
     {
         public static GameManager Instance {  get; private set; } //We can use zenject for clean architecture
 
-        bool _isLevelCompleted = false;
-        bool _isLevelFailed = false;
-        bool _isAllowedInputForGateOpening = false;
         ColorGate _currentColorGate = null; //We can use zenject for clean architecture
 
-        public bool IsLevelCompleted => _isLevelCompleted;
-        public bool IsLevelFailed => _isLevelFailed;
-        public bool IsAllowedInputForGateOpening => _isAllowedInputForGateOpening;
+        public bool IsLevelStarted { get; private set; }
+        public bool IsLevelCompleted { get; private set; }
+        public bool IsLevelFailed { get; private set; }
+        public bool IsAllowedInputForGateOpening { get; private set; }
 
-        public event Action OnGameStarted, OnLvlCompleted, OnLvlFailed;
+        public event Action OnLevelStarted, OnLevelCompleted, OnLevelFailed;
 
         void Awake()
         {
             Instance = this;
+            IsLevelStarted = false;
         }
 
         public void ManageGameStarted()
         {
-            OnGameStarted?.Invoke();
+            OnLevelStarted?.Invoke();
+            IsLevelStarted = true;
         }
 
         public void ManageAllowingGateOpening(bool allow, ColorGate colorGate)
         {
-            _isAllowedInputForGateOpening = allow;
+            IsAllowedInputForGateOpening = allow;
             _currentColorGate = colorGate;
             //If allow then 
             //Now, Show a UI message to press key (R for red, G for green, and B for blue)
@@ -63,7 +63,7 @@ namespace Aftab
 
         void ResetGateOpeningAndCurrentColorGate()
         {
-            _isAllowedInputForGateOpening = false;
+            IsAllowedInputForGateOpening = false;
             _currentColorGate = null;
         }
 
@@ -80,18 +80,18 @@ namespace Aftab
 
         void ManageLevelComplete()
         {
-            _isLevelCompleted = true;
-            _isAllowedInputForGateOpening = false;
-            OnLvlCompleted?.Invoke();
+            IsLevelCompleted = true;
+            IsAllowedInputForGateOpening = false;
+            OnLevelCompleted?.Invoke();
         }
 
         void ManageLevelFailed()
         {
-            _isLevelFailed = true;
-            _isAllowedInputForGateOpening = false;
+            IsLevelFailed = true;
+            IsAllowedInputForGateOpening = false;
             //Camshake
             //Destroy ball. Make ball broken in pieces
-            OnLvlFailed?.Invoke();
+            OnLevelFailed?.Invoke();
         }
     }
 }

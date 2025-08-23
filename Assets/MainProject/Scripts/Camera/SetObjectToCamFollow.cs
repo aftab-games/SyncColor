@@ -4,10 +4,11 @@ namespace Aftab
 {
     public class SetObjectToCamFollow : MonoBehaviour
     {
-        //Attach this script to the object which will be followed by camera
+        [SerializeField]
+        Transform trToFollow;
         void Start()
         {
-            CamBoxController.Instance.SetObjectToFollowAndLook(transform, transform);
+            CamBoxController.Instance.SetObjectToFollowAndLook(trToFollow, trToFollow);
         }
     }
 }
