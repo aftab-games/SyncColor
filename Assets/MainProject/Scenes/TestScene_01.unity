@@ -1197,37 +1197,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 660746855}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &551801340
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 551801341}
-  m_Layer: 0
-  m_Name: BodyIntoPieces
-  m_TagString: Player
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &551801341
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 551801340}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1869699323}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &604174867
 GameObject:
   m_ObjectHideFlags: 0
@@ -3172,6 +3141,7 @@ GameObject:
   - component: {fileID: 1869699323}
   - component: {fileID: 1869699324}
   - component: {fileID: 1869699326}
+  - component: {fileID: 1869699327}
   m_Layer: 0
   m_Name: PlayerBox
   m_TagString: Player
@@ -3193,7 +3163,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 745201488}
-  - {fileID: 551801341}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1869699324
@@ -3226,6 +3195,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trToFollow: {fileID: 745201488}
+--- !u!114 &1869699327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869699322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51be0f193b41c904e8f9bbd08d129dbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brokenPiecesParentGO: {fileID: 6726515002923903614, guid: 6e9a7764ecccfa94ea995e2e535deb08, type: 3}
 --- !u!1001 &1871067618
 PrefabInstance:
   m_ObjectHideFlags: 0
