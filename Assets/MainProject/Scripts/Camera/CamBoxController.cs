@@ -31,7 +31,7 @@ namespace Aftab
         Vector3 initialFollowSpeed;
         float initialLookSpeed;
 
-        public bool canFollow = false, canLook = false;
+        bool canFollow = false, canLook = false;
 
         void Awake() => Instance = this;
 
@@ -40,32 +40,32 @@ namespace Aftab
             initialFollowSpeed = followSpeed;
             initialLookSpeed = lookSpeed;
 
-            //GameController.Instance.OnGameStarted += ManageOnGameStarted;
-            //GameController.Instance.OnLevelCompleted += ManageOnLevelCompleted;
-            //GameController.Instance.OnLevelFailed += ManageOnLevelFailed;
+            GameManager.Instance.OnGameStarted += ManageOnGameStarted;
+            GameManager.Instance.OnLvlCompleted += ManageOnLevelCompleted;
+            GameManager.Instance.OnLvlFailed += ManageOnLevelFailed;
         }
 
         void OnDisable()
         {
-            //GameController.Instance.OnGameStarted -= ManageOnGameStarted;
-            //GameController.Instance.OnLevelCompleted -= ManageOnLevelCompleted;
-            //GameController.Instance.OnLevelFailed -= ManageOnLevelFailed;
+            GameManager.Instance.OnGameStarted -= ManageOnGameStarted;
+            GameManager.Instance.OnLvlCompleted -= ManageOnLevelCompleted;
+            GameManager.Instance.OnLvlFailed -= ManageOnLevelFailed;
         }
 
         void ManageOnGameStarted()
         {
-            //canFollow = true;
+            canFollow = true;
             //canLook = true;
         }
         void ManageOnLevelCompleted()
         {
             canFollow = false;
-            canLook = false;
+            //canLook = false;
         }
         void ManageOnLevelFailed()
         {
             canFollow = false;
-            canLook = false;
+            //canLook = false;
         }
 
         void LateUpdate()
