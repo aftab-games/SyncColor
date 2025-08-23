@@ -74,6 +74,7 @@ namespace Aftab
         void ManageInput()
         {
             // OLD INPUT SYSTEM: Will Replace with New Input System later
+            // TODO: Polish the movement system
             if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
             {
                 ChangeLane(-1);
@@ -117,6 +118,7 @@ namespace Aftab
 
         void ManageSideWiseMovement()
         {
+            //TODO: Polish the movement system, as the object is moving forward by rigidboy, it's sidewise movement should be determined by rigidbody too
             if (!_canMove) return;
             Vector3 newPosition = Vector3.Lerp(transform.position, 
                 new Vector3(_targetPosition.x, transform.position.y, transform.position.z),
