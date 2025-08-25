@@ -34,7 +34,7 @@ namespace Aftab
 
         void PlayBallBreakFx()
         {
-            ballBreakFx.transform.position = PlayerController.Instance.transform.position;
+            ballBreakFx.transform.position = PlayerController.Instance.GetBallTransform().position;
             ballBreakFx.gameObject.SetActive(true);
             ballBreakFx.Play();
         }
