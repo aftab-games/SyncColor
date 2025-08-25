@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using UnityEngine;
 
 namespace Aftab
@@ -12,7 +13,7 @@ namespace Aftab
         float sideSpeed = 10.0f;
         [SerializeField]
         Rigidbody mainBodyRB;
-        Transform mainBodyTr;
+        Transform ballMainBodyTr;
         bool canMove = false;
         float laneDistance = 2.5f;
         int currentLane = 1; // 0 = Left, 1 = Center, 2 = Right
@@ -31,7 +32,7 @@ namespace Aftab
         {
             Instance = this;
             canMove = false;
-            mainBodyTr = mainBodyRB.transform;
+            ballMainBodyTr = mainBodyRB.transform;
             SetPlayerColor(playerColor);
         }
 
@@ -112,7 +113,7 @@ namespace Aftab
         {
             currentLane = Mathf.Clamp(currentLane + direction, 0, 2);
             float targetXPos = (currentLane - 1) * laneDistance;
-            targetPosition = new Vector3(targetXPos, mainBodyTr.position.y, mainBodyTr.position.z);
+            targetPosition = new Vector3(targetXPos, ballMainBodyTr.position.y, ballMainBodyTr.position.z);
         }
 
 
@@ -121,8 +122,8 @@ namespace Aftab
             //TODO: Polish the movement system.
             //As the object is moving forward by rigidboy, it's sidewise movement should be determined by rigidbody too
             if (!canMove) return;
-            Vector3 newPosition = new Vector3(targetPosition.x, mainBodyTr.position.y, mainBodyTr.position.z);
-            mainBodyTr.position = Vector3.Lerp(mainBodyTr.position, newPosition, Time.deltaTime * sideSpeed);
+            Vector3 newPosition = new Vector3(targetPosition.x, ballMainBodyTr.position.y, ballMainBodyTr.position.z);
+            ballMainBodyTr.position = Vector3.Lerp(ballMainBodyTr.position, newPosition, Time.deltaTime * sideSpeed);
         }
 
         void SetPlayerColor(Color newColor)
@@ -144,11 +145,10 @@ namespace Aftab
 
         public void BreakBodyIntoPieces()
         {
-            //TODO: Need to implement ball break system.
-            //At this moment we will just show some cube scattering orginated from the ball and deactivate the ball mesh
-            //Deactivate current body
-            //Activate pieces
-            //Activate rigidbody of broken pieces
+            if(TryGetComponent<BallBreakingHandler>(out BallBreakingHandler ballBreakingHandler))
+            {
+                ballBreakingHandler.ManageBallBreak();
+            }
         }
 
         
@@ -163,6 +163,11 @@ namespace Aftab
         public Color GetPlayerColor()
         {
             return playerColor;
+        }
+
+        public Transform GetBallTransform()
+        {
+            return ballMainBodyTr;
         }
     }
 }
