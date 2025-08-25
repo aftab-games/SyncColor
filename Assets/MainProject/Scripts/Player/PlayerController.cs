@@ -70,6 +70,7 @@ namespace Aftab
             targetVelocity.y = mainBodyRB.linearVelocity.y;
             targetVelocity.z = forwardSpeed;
             mainBodyRB.linearVelocity = targetVelocity;
+            //mainBodyRB.AddForce(Vector3.up * -9.81f, ForceMode.Force);
         }
 
         void ManageInput()
