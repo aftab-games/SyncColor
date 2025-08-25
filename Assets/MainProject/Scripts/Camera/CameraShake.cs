@@ -34,6 +34,9 @@ namespace Aftab
 
         IEnumerator Shake(float _duration, float _magnitude)
         {
+            //TODO: Convert this to awaitable
+            //TODO: Convert this to Unitask
+            //Set an animation curve for magnitude to smooothly reduce the shakiness over time then completely stop the shaking at the end
             Vector3 originalPos = transform.localPosition;
 
             float elapsedTime = 0.0f;
