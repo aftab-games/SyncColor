@@ -51,12 +51,27 @@ namespace Aftab
 
         void ActivateLvlCompletedPanel()
         {
-            lvlCompletePanelGO.SetActive(true);
+            DelayedActivateLvlCompletedPanel();
+            //Implement awaitable
+            //TODO: Implemeent Unitask
+            async Awaitable DelayedActivateLvlCompletedPanel()
+            {
+                await Awaitable.WaitForSecondsAsync(1);
+                lvlCompletePanelGO.SetActive(true);
+            }
+
         }
 
         void ActivateLvlFailedPanel()
         {
-            lvlFailedPanelGO.SetActive(true);
+            DelayedActivateLvlFailedPanel();
+            //Implement awaitable
+            //TODO: Implemeent Unitask
+            async Awaitable DelayedActivateLvlFailedPanel()
+            {
+                await Awaitable.WaitForSecondsAsync(1);
+                lvlFailedPanelGO.SetActive(true);
+            }
         }
     }
 }
