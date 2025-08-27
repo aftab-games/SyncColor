@@ -4,8 +4,11 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - GateOpener
   - Gate
   - LevelEnd
+  - Obstacles
+  - FallingDownTrigger
   layers:
   - Default
   - TransparentFX
@@ -13,7 +16,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 
