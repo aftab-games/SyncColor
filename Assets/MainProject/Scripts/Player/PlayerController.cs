@@ -8,14 +8,20 @@ namespace Aftab
         public static PlayerController Instance { get; private set; }
         [Header("Movement Settings")]
         [SerializeField]
-        float forwardSpeed = 1.0f;
+        Rigidbody mainBodyRB;
+        [SerializeField]
+        LayerMask groundLayer;
+        [SerializeField]
+        float forwardSpeed = 10.0f;
         [SerializeField]
         float sideSpeed = 10.0f;
         [SerializeField]
-        Rigidbody mainBodyRB;
+        float jumpSpeed = 10.0f;
+        float distancefromGround;
         Transform ballMainBodyTr;
         bool canMove = false;
-        float laneDistance = 2.5f;
+        bool canJump = false;
+        float laneDistance = 4.5f;
         int currentLane = 1; // 0 = Left, 1 = Center, 2 = Right
         Vector3 targetPosition = Vector3.zero;
         Vector3 targetVelocity = Vector3.zero;
@@ -32,6 +38,7 @@ namespace Aftab
         {
             Instance = this;
             canMove = false;
+            canJump = false;
             ballMainBodyTr = mainBodyRB.transform;
             SetPlayerColor(playerColor);
         }
@@ -39,6 +46,7 @@ namespace Aftab
         void Start()
         {
             GameManager.Instance.OnLevelStarted += ManageOnGameStarted;
+            distancefromGround = mainBodyRB.GetComponent<Collider>().bounds.extents.y + 0.1f;
         }
 
         void OnDisable()
@@ -55,22 +63,12 @@ namespace Aftab
         {
             if(GameManager.Instance.IsLevelCompleted || GameManager.Instance.IsLevelCompleted) return;
             ManageInput(); //This needs to be moved to InputManager script
-            ManageSideWiseMovement();
         }
 
         void FixedUpdate()
         {
-            ManageForwardMovement();
-        }
-
-        void ManageForwardMovement()
-        {
-            if (!canMove) return;
-            targetVelocity.x = mainBodyRB.linearVelocity.x;
-            targetVelocity.y = mainBodyRB.linearVelocity.y;
-            targetVelocity.z = forwardSpeed;
-            mainBodyRB.linearVelocity = targetVelocity;
-            //mainBodyRB.AddForce(Vector3.up * -9.81f, ForceMode.Force);
+            ManageForwardAndUpMovement();
+            ManageSideWiseMovement();
         }
 
         void ManageInput()
@@ -86,7 +84,13 @@ namespace Aftab
                 ChangeLane(1);
             }
 
-            if(GameManager.Instance.IsAllowedInputForGateOpening)
+            else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+            {
+                //Jump
+                canJump = true;
+            }
+
+            if (GameManager.Instance.IsAllowedInputForGateOpening)
             {
                 isMatchedColor = false;
                 matchedColor = Color.white;
@@ -94,19 +98,39 @@ namespace Aftab
                 {
                     isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.R, out matchedColor);
                 }
-                else if(Input.GetKeyDown(KeyCode.G))
+                else if (Input.GetKeyDown(KeyCode.G))
                 {
-                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.G,out matchedColor);
+                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.G, out matchedColor);
                 }
-                else if(Input.GetKeyDown(KeyCode.B))
+                else if (Input.GetKeyDown(KeyCode.B))
                 {
                     isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.B, out matchedColor);
                 }
 
-                if(isMatchedColor)
+                if (isMatchedColor)
                 {
                     SetPlayerColor(matchedColor);
                 }
+            }
+        }
+
+        void ManageForwardAndUpMovement()
+        {
+            if (!canMove) return;
+            targetVelocity.x = mainBodyRB.linearVelocity.x;
+            targetVelocity.y = mainBodyRB.linearVelocity.y;
+            targetVelocity.z = forwardSpeed;
+            mainBodyRB.linearVelocity = targetVelocity;
+            ManageJump();
+            void ManageJump()
+            {
+                //Check can jump
+                if (!canJump) return;
+                //Check is grounded
+                if (!IsGrounded()) return;
+                mainBodyRB.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+                canJump = false;
+                bool IsGrounded() => Physics.Raycast(ballMainBodyTr.position, Vector3.down, distancefromGround, groundLayer);
             }
         }
 
