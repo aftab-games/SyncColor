@@ -15,11 +15,13 @@ namespace Aftab
         public bool IsLevelFailed { get; private set; }
         public bool IsAllowedInputForGateOpening { get; private set; }
 
-        public event Action OnLevelStarted, OnLevelCompleted, OnLevelFailed, OnPlayerHit;
+        public event Action OnLevelStarted, OnLevelCompleted, OnLevelFailed, OnPlayerHit, OnPlayerFallingDown;
 
         void Awake()
         {
             Instance = this;
+            Application.targetFrameRate = 60;
+            Input.multiTouchEnabled = false;
             IsLevelStarted = false;
         }
 
@@ -85,6 +87,7 @@ namespace Aftab
         {
             //At this moment, Level failed will be called
             ManageLevelFailed();
+            OnPlayerFallingDown?.Invoke();
         }
 
         public void PlayerReachedAtLevelEnd()
