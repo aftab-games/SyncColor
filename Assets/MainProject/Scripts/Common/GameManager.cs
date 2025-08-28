@@ -15,7 +15,7 @@ namespace Aftab
         public bool IsLevelFailed { get; private set; }
         public bool IsAllowedInputForGateOpening { get; private set; }
 
-        public event Action OnLevelStarted, OnLevelCompleted, OnLevelFailed;
+        public event Action OnLevelStarted, OnLevelCompleted, OnLevelFailed, OnPlayerHit;
 
         void Awake()
         {
@@ -68,6 +68,20 @@ namespace Aftab
         }
 
         public void PlayerCollideWithGate()
+        {
+            //At this moment, Level failed will be called
+            ManageLevelFailed();
+            OnPlayerHit?.Invoke();
+        }
+
+        public void PlayerCollideWithObstacle()
+        {
+            //At this moment, Level failed will be called
+            ManageLevelFailed();
+            OnPlayerHit?.Invoke();
+        }
+
+        public void PlayerFallingDown()
         {
             //At this moment, Level failed will be called
             ManageLevelFailed();

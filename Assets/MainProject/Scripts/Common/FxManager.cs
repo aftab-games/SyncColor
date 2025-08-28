@@ -12,13 +12,13 @@ namespace Aftab
         void Start()
         {
             GameManager.Instance.OnLevelCompleted += ManageLevelCompleted;
-            GameManager.Instance.OnLevelFailed += PlayBallBreakFx;
+            GameManager.Instance.OnPlayerHit += PlayBallBreakFx;
         }
 
         void OnDisable()
         {
             GameManager.Instance.OnLevelCompleted -= ManageLevelCompleted;
-            GameManager.Instance.OnLevelFailed -= PlayBallBreakFx;
+            GameManager.Instance.OnPlayerHit -= PlayBallBreakFx;
         }
         void ManageLevelCompleted()
         {

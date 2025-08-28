@@ -58,6 +58,12 @@ namespace Aftab
                 playerController.StopBallMovement();
                 GameManager.Instance.PlayerReachedAtLevelEnd();
             }
+            else if (other.gameObject.CompareTag("FallingDownTrigger"))
+            {
+                Debug.Log("Falling Down Triggered");
+                playerController.ManageFallingDown();
+                GameManager.Instance.PlayerFallingDown();
+            }
         }
 
         void OnCollisionEnter(Collision collision)
@@ -72,6 +78,14 @@ namespace Aftab
                 playerController.BreakBodyIntoPieces();
                 //Send a message to Game manager
                 GameManager.Instance.PlayerCollideWithGate();
+            }
+            else if (collision.gameObject.CompareTag("Obstacles"))
+            {
+                Debug.Log("Obstacle Hit");
+                playerController.StopBallMovement();
+                playerController.BreakBodyIntoPieces();
+                //Send a message to Game manager
+                GameManager.Instance.PlayerCollideWithObstacle();
             }
         }
     }

@@ -33,7 +33,10 @@ namespace Aftab
         Color playerColor;
         bool isMatchedColor = false;
         Color matchedColor = Color.white;
-        
+
+        BallBreakingHandler ballBreakingHandler;
+
+
         void Awake()
         {
             Instance = this;
@@ -41,6 +44,7 @@ namespace Aftab
             canJump = false;
             ballMainBodyTr = mainBodyRB.transform;
             SetPlayerColor(playerColor);
+            ballBreakingHandler = GetComponent<BallBreakingHandler>();
         }
 
         void Start()
@@ -170,13 +174,13 @@ namespace Aftab
 
         public void BreakBodyIntoPieces()
         {
-            if(TryGetComponent<BallBreakingHandler>(out BallBreakingHandler ballBreakingHandler))
-            {
-                ballBreakingHandler.ManageBallBreak();
-            }
+            ballBreakingHandler.ManageBallBreak();
         }
 
-        
+        public void ManageFallingDown()
+        {
+            canMove = false;
+        }
 
         public void StopBallMovement()
         {
