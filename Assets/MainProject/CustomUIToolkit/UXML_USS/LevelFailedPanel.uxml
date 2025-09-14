@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/MainProject/CustomUIToolkit/UXML_USS/GameUI.uss?fileID=7433441132597879392&amp;guid=67619573a6bbb084b90eb72cf6a2f346&amp;type=3#GameUI" />
+    <ui:VisualElement name="LevelFailedPanel" class="panel">
+        <ui:Label text="Level Failed" name="FailedLabel" class="fail-label" />
+        <ui:Button text="Retry" name="RetryButton" class="button" />
+    </ui:VisualElement>
+</ui:UXML>
