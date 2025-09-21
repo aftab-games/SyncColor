@@ -3,11 +3,11 @@ using DG.Tweening;
 
 namespace Aftab
 {
-    public enum GateColorCode
+    public enum GateColorCode //We can manage this by creating scriptable object
     {
         R =0, G = 1, B = 2
     }
-    public class ColorGate : MonoBehaviour
+    public class ColorGate : MonoBehaviour //We can create this as modular by implementing interface
     {
         [SerializeField]
         Color _gateColor;
