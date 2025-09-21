@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using static UnityEngine.Rendering.DebugUI;
 using Button = UnityEngine.UI.Button;
 using UITKButton = UnityEngine.UIElements.Button;
 
@@ -45,13 +46,18 @@ namespace Aftab
             startButton = root.Q<UITKButton>("StartButton");
             nextButton = root.Q<UITKButton>("NextButton");
             retryButton = root.Q<UITKButton>("RetryButton");
+
+            //Hide panels
+            startPanel.style.display = DisplayStyle.None;
+            completePanel.style.display = DisplayStyle.None;
+            failedPanel.style.display = DisplayStyle.None;
         }
 
         void Start()
         {
             gameManager = GameManager.Instance;
-            gameManager.OnLevelCompleted += () => ActivateLvlCompletedPanel();
-            gameManager.OnLevelFailed += ActivateLvlFailedPanel;
+            //gameManager.OnLevelCompleted += () => ActivateLvlCompletedPanel();
+            //gameManager.OnLevelFailed += ActivateLvlFailedPanel;
             //startGameBtn.onClick.AddListener(ManageTappedStartGameBtn); //Disabling for UIToolKit
             //nextLvlBtn.onClick.AddListener (ManageTappedNextLvlBtn); //Disabling for UIToolKit
             //retryBtn.onClick.AddListener (ManageTappedRetryBtn); //Disabling for UIToolKit
@@ -67,13 +73,14 @@ namespace Aftab
             retryButton.clicked += () => ManageTappedRetryBtn();
             //
             // Initial state
+            //root.style.display = DisplayStyle.Flex;
             ShowPanel(startPanel);
         }
 
         void OnDisable()
         {
-            gameManager.OnLevelCompleted -= ActivateLvlCompletedPanel;
-            gameManager.OnLevelFailed -= ActivateLvlFailedPanel;
+            //gameManager.OnLevelCompleted -= ActivateLvlCompletedPanel;
+            //gameManager.OnLevelFailed -= ActivateLvlFailedPanel;
             //startGameBtn.onClick.RemoveAllListeners(); //Disabling for UIToolKit
             //nextLvlBtn.onClick.RemoveAllListeners(); //Disabling for UIToolKit
             //retryBtn.onClick.RemoveAllListeners(); //Disabling for UIToolKit

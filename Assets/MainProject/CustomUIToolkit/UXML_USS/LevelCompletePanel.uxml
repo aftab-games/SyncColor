@@ -1,7 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/MainProject/CustomUIToolkit/UXML_USS/GameUI.uss?fileID=7433441132597879392&amp;guid=67619573a6bbb084b90eb72cf6a2f346&amp;type=3#GameUI" />
-    <ui:VisualElement name="LevelCompletePanel" class="panel">
-        <ui:Label text="Level Completed" name="CompleteLabel" class="success-label" />
-        <ui:Button text="Next Level" name="NextButton" class="button" />
-    </ui:VisualElement>
-</ui:UXML>

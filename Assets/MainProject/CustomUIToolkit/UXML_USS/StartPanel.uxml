@@ -4,12 +4,12 @@
         <engine:Label text="Color Sync Runner" name="TitleLabel" class="title-label" />
         <engine:Button text="Start Game" name="StartButton" class="button" />
     </engine:VisualElement>
-    <engine:VisualElement name="LevelCompletePanel" class="panel">
+    <engine:VisualElement name="LevelCompletePanel" enabled="true" class="panel" style="opacity: 1;">
         <engine:Label text="Level Completed" name="CompleteLabel" class="success-label" />
-        <engine:Button text="Next Level" name="NextButton" class="button" />
+        <engine:Button text="Next Level" name="NextButton" class="button" style="background-color: rgb(7, 166, 102);" />
     </engine:VisualElement>
     <engine:VisualElement name="LevelFailedPanel" class="panel">
         <engine:Label text="Level Failed" name="FailedLabel" class="fail-label" />
-        <engine:Button text="Retry" name="RetryButton" class="button" />
+        <engine:Button text="Retry" name="RetryButton" class="button" style="background-color: rgb(121, 13, 215);" />
     </engine:VisualElement>
 </engine:UXML>
