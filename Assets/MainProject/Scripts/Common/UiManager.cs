@@ -19,7 +19,21 @@ namespace Aftab
         Button startGameBtn, nextLvlBtn, retryBtn;
         GameManager gameManager;
 
+        //Gate opener button //This should be in separate script for SRP of SOLID and Buttons should be modular
+        [Header("Gate Opener Buttons:")]
+        [SerializeField]
+        GameObject gateOpenerGO;
+        [SerializeField]
+        Transform gateOpenerBoxTr;
+        [SerializeField]
+        Button gateOpenerBtn1;
+        [SerializeField]
+        Button gateOpenerBtn2;
+        [SerializeField]
+        Button gateOpenerBtn3;
+
         //UI Tool Kit
+        [Header("UIToolKit Settings:")]
         [SerializeField]
         UIDocument uiDocument;
         VisualElement root;
