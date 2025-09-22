@@ -30,6 +30,8 @@ namespace Aftab
         [SerializeField]
         Renderer playerRenderer;
         [SerializeField]
+        TrailRenderer trailRenderer;
+        [SerializeField]
         Color playerColor;
         bool isMatchedColor = false;
         Color matchedColor = Color.white;
@@ -161,6 +163,7 @@ namespace Aftab
             if (playerRenderer != null)
             {
                 playerRenderer.material.color = playerColor;
+                trailRenderer.material.SetColor("_BaseColor", playerColor); //trailRenderer.material.color = playerColor;
             }
         }
 
