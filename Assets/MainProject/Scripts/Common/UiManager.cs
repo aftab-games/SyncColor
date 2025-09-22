@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,6 +11,8 @@ namespace Aftab
 {
     public class UiManager : MonoBehaviour
     {
+        GameManager gameManager; //This needs to be optimized following SOLID - Should be decoupled
+
         [Header("Settings:")]
         [SerializeField]
         GameObject lvlCompletePanelGO;
@@ -17,10 +20,16 @@ namespace Aftab
         GameObject lvlFailedPanelGO;
         [SerializeField]
         Button startGameBtn, nextLvlBtn, retryBtn;
-        GameManager gameManager;
+        [Header("Level No Related:")]
+        [SerializeField]
+        GameObject levelBoxGO;
+        [SerializeField]
+        UnityEngine.UI.Image levelProgressFillImage;
+        [SerializeField]
+        TextMeshProUGUI levelNoTMP;
 
         //Gate opener button //This should be in separate script for SRP of SOLID and Buttons should be modular
-        [Header("Gate Opener Buttons:")]
+        [Header("Gate Opener Related:")]
         [SerializeField]
         GameObject gateOpenerGO;
         [SerializeField]
@@ -31,6 +40,11 @@ namespace Aftab
         Button gateOpenerBtn2;
         [SerializeField]
         Button gateOpenerBtn3;
+        [Header("Gate Opener Countdown:")]
+        [SerializeField]
+        GameObject gateOpenerCountDownGO;
+        [SerializeField]
+        TextMeshProUGUI gateOpenerCountDownTMP;
 
         //UI Tool Kit
         [Header("UIToolKit Settings:")]

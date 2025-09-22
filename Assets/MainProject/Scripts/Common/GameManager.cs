@@ -35,7 +35,7 @@ namespace Aftab
         {
             IsAllowedInputForGateOpening = allow;
             _currentColorGate = colorGate;
-            //If allow then 
+            //If allow then,
             //Now, Show a UI message to press key (R for red, G for green, and B for blue)
             //Or, Open a UI panel with button showing different color.
         }

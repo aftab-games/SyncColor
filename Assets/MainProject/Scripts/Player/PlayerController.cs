@@ -100,9 +100,9 @@ namespace Aftab
             {
                 isMatchedColor = false;
                 matchedColor = Color.white;
-                if (Input.GetKeyDown(KeyCode.R))
+                if (Input.GetKeyDown(KeyCode.Y))
                 {
-                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.R, out matchedColor);
+                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.Y, out matchedColor);
                 }
                 else if (Input.GetKeyDown(KeyCode.G))
                 {
@@ -118,6 +118,17 @@ namespace Aftab
                     SetBodyAndTrailColor(matchedColor);
                 }
             }
+        }
+
+        void PausePlayerMovement()
+        {
+            //TODO: Store current state, Physics states. These state will be usefull when resume the movement
+            //Halt the movement
+        }
+
+        void ResumePlayerMovement()
+        {
+            //TODO: Resume player movement using stored physcis states
         }
 
         void ManageForwardAndUpMovement()

@@ -5,7 +5,8 @@ namespace Aftab
 {
     public enum GateColorCode //We can manage this by creating scriptable object
     {
-        R =0, G = 1, B = 2
+        //Y = Yellow, G = Green, B = Blue
+        Y =0, G = 1, B = 2
     }
     public class ColorGate : MonoBehaviour //We can create this as modular by implementing interface
     {
