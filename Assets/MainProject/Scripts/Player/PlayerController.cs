@@ -162,12 +162,18 @@ namespace Aftab
             playerColor = newColor;
             if (playerRenderer != null)
             {
-                playerRenderer.material.color = playerColor;
+                //main body
+                //playerRenderer.material.color = playerColor;
                 MaterialPropertyBlock mpBlock = new MaterialPropertyBlock();
+                playerRenderer.GetPropertyBlock(mpBlock);
+                mpBlock.SetColor("_BaseColor", playerColor);
+                playerRenderer.SetPropertyBlock(mpBlock);
+                //Trail
+                //trailRenderer.material.color = playerColor;
+                //trailRenderer.material.SetColor("_BaseColor", playerColor);
                 trailRenderer.GetPropertyBlock(mpBlock);
                 mpBlock.SetColor("_BaseColor", playerColor);
                 trailRenderer.SetPropertyBlock(mpBlock);
-                //trailRenderer.material.SetColor("_BaseColor", playerColor); //trailRenderer.material.color = playerColor;
             }
         }
 
