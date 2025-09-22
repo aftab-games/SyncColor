@@ -45,7 +45,7 @@ namespace Aftab
             canMove = false;
             canJump = false;
             ballMainBodyTr = mainBodyRB.transform;
-            SetPlayerColor(playerColor);
+            SetBodyAndTrailColor(playerColor);
             ballBreakingHandler = GetComponent<BallBreakingHandler>();
         }
 
@@ -115,7 +115,7 @@ namespace Aftab
 
                 if (isMatchedColor)
                 {
-                    SetPlayerColor(matchedColor);
+                    SetBodyAndTrailColor(matchedColor);
                 }
             }
         }
@@ -157,18 +157,21 @@ namespace Aftab
             ballMainBodyTr.position = Vector3.Lerp(ballMainBodyTr.position, newPosition, Time.deltaTime * sideSpeed);
         }
 
-        void SetPlayerColor(Color newColor)
+        void SetBodyAndTrailColor(Color newColor)
         {
             playerColor = newColor;
             if (playerRenderer != null)
             {
                 playerRenderer.material.color = playerColor;
-                trailRenderer.material.SetColor("_BaseColor", playerColor); //trailRenderer.material.color = playerColor;
+                MaterialPropertyBlock mpBlock = new MaterialPropertyBlock();
+                trailRenderer.GetPropertyBlock(mpBlock);
+                mpBlock.SetColor("_BaseColor", playerColor);
+                trailRenderer.SetPropertyBlock(mpBlock);
+                //trailRenderer.material.SetColor("_BaseColor", playerColor); //trailRenderer.material.color = playerColor;
             }
         }
 
         
-
         void BallAnimationAtStart()
         {
             //Have a nice and smooth animation at the start.
