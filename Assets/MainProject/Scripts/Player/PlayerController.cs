@@ -102,15 +102,15 @@ namespace Aftab
                 matchedColor = Color.white;
                 if (Input.GetKeyDown(KeyCode.Y))
                 {
-                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.Y, out matchedColor);
+                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateKey.Y, out matchedColor);
                 }
                 else if (Input.GetKeyDown(KeyCode.G))
                 {
-                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.G, out matchedColor);
+                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateKey.G, out matchedColor);
                 }
                 else if (Input.GetKeyDown(KeyCode.B))
                 {
-                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateColorCode.B, out matchedColor);
+                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateKey.B, out matchedColor);
                 }
 
                 if (isMatchedColor)
@@ -118,6 +118,12 @@ namespace Aftab
                     SetBodyAndTrailColor(matchedColor);
                 }
             }
+        }
+
+        void ResumeMovementAndSetColor(Color color)
+        {
+            ResumePlayerMovement();
+            SetBodyAndTrailColor(color);
         }
 
         void PausePlayerMovement()

@@ -1,9 +1,12 @@
+using DG.Tweening;
+using System;
+using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI;
 using Button = UnityEngine.UI.Button;
 using UITKButton = UnityEngine.UIElements.Button;
 
@@ -35,16 +38,20 @@ namespace Aftab
         [SerializeField]
         Transform gateOpenerBoxTr;
         [SerializeField]
-        Button gateOpenerBtn1;
+        List<Button> gateOpenerButtons = new List<Button>();
         [SerializeField]
-        Button gateOpenerBtn2;
-        [SerializeField]
-        Button gateOpenerBtn3;
+        [Tooltip("Should aligned with GateOpeningButtons serial. Y=Yellow, G=Green, B=Blue. Button's color will be assigned from this.")]
+        List<GateKeySO> gateKeySOs = new List<GateKeySO>();
+        
         [Header("Gate Opener Countdown:")]
         [SerializeField]
         GameObject gateOpenerCountDownGO;
         [SerializeField]
         TextMeshProUGUI gateOpenerCountDownTMP;
+        [SerializeField]
+        Transform gateOpenerCountDownTr;
+        bool isGateOpenerActivated = false;
+        CancellationTokenSource cncltnTknSrc;
 
         //UI Tool Kit
         [Header("UIToolKit Settings:")]
@@ -84,6 +91,13 @@ namespace Aftab
         void Start()
         {
             gameManager = GameManager.Instance;
+            gameManager.OnActivateColorGate += () => ManageActivateGateBox();
+            AssignGateOpeningButtonsColor();
+            //TODO: Manage Button click of color gate button 
+            for (int i = 0; i < gateOpenerButtons.Count; i++)
+            {
+                gateOpenerButtons[i].onClick.AddListener(()=> ManageGateOpenerButtonClick(i));
+            }
             //gameManager.OnLevelCompleted += () => ActivateLvlCompletedPanel();
             //gameManager.OnLevelFailed += ActivateLvlFailedPanel;
             //startGameBtn.onClick.AddListener(ManageTappedStartGameBtn); //Disabling for UIToolKit
@@ -94,30 +108,170 @@ namespace Aftab
             gameManager.OnLevelStarted += () => HidePanel(startPanel);
             gameManager.OnLevelCompleted += () => ShowPanel(completePanel);
             gameManager.OnLevelFailed += () => ShowPanel(failedPanel);
-
             // Button callbacks
             startButton.clicked += () => ManageTappedStartGameBtn();
             nextButton.clicked += () => ManageTappedNextLvlBtn();
             retryButton.clicked += () => ManageTappedRetryBtn();
-            //
             // Initial state
             //root.style.display = DisplayStyle.Flex;
             ShowPanel(startPanel);
+            //End of UiToolKit
         }
 
         void OnDisable()
         {
+            for (int i = 0; i < gateOpenerButtons.Count; i++)
+            {
+                gateOpenerButtons[i].onClick.RemoveListener(() => ManageGateOpenerButtonClick(i));
+            }
             //gameManager.OnLevelCompleted -= ActivateLvlCompletedPanel;
             //gameManager.OnLevelFailed -= ActivateLvlFailedPanel;
             //startGameBtn.onClick.RemoveAllListeners(); //Disabling for UIToolKit
             //nextLvlBtn.onClick.RemoveAllListeners(); //Disabling for UIToolKit
             //retryBtn.onClick.RemoveAllListeners(); //Disabling for UIToolKit
-
+            gameManager.OnActivateColorGate -= () => ManageActivateGateBox();
             //UI Tool Kit
             gameManager.OnLevelStarted -= () => HidePanel(startPanel);
             gameManager.OnLevelCompleted -= () => ShowPanel(completePanel);
             gameManager.OnLevelFailed -= () => ShowPanel(failedPanel);
+            // Button callbacks
+            startButton.clicked -= () => ManageTappedStartGameBtn();
+            nextButton.clicked -= () => ManageTappedNextLvlBtn();
+            retryButton.clicked -= () => ManageTappedRetryBtn();
         }
+
+        void ManageActivateGateBox()
+        {
+            //Activate panel
+            isGateOpenerActivated = true;
+            gateOpenerBoxTr.localScale = Vector3.zero;
+            float countDownDuration = 3f;
+            gateOpenerCountDownTMP.text = countDownDuration.ToString();
+            gateOpenerGO.SetActive(true);
+            gateOpenerBoxTr.DOScale(1, 0.3f).SetEase(Ease.OutBounce);
+            //Activate countdown with resetting for 3 seconds
+            //ActivateCountDown();
+            //Activate countdown in a async await or coroutine eventually in UniTask
+            StartCountDown();
+            async void StartCountDown()
+            {
+                cncltnTknSrc = new CancellationTokenSource();
+
+                try
+                {
+                    while (countDownDuration > 0)
+                    {
+                        gateOpenerCountDownTMP.text = Mathf.CeilToInt(countDownDuration).ToString();
+                        gateOpenerCountDownTr.DOPunchScale(Vector3.one * 1.1f, 0.2f);
+                        await Awaitable.WaitForSecondsAsync(1f, cncltnTknSrc.Token); // Wait for 1 second
+                        countDownDuration--;
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    Debug.Log("Countdown cancelled.");
+                    gateOpenerCountDownTMP.text = "!";
+                }
+                finally
+                {
+                    if (isGateOpenerActivated)
+                    {
+                        //Deactivate box
+                        ManageDeactivateGateBox();
+                        //Resume player movement
+                    }
+                    cncltnTknSrc.Dispose();
+                }
+            }
+            void ActivateCountDown()
+            {
+                
+                /*
+                 * public async UniTaskVoid StartCountdown() // Use UniTaskVoid for methods not returning a value
+    {
+        cts = new CancellationTokenSource();
+        float currentTime = countdownDuration;
+
+        try
+        {
+            while (currentTime > 0)
+            {
+                countdownText.text = Mathf.CeilToInt(currentTime).ToString();
+                await UniTask.Delay(System.TimeSpan.FromSeconds(1), cancellationToken: cts.Token); // Wait for 1 second
+                currentTime--;
+            }
+            countdownText.text = "GO!";
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.Log("Countdown cancelled.");
+            countdownText.text = "Cancelled";
+        }
+        finally
+        {
+            cts.Dispose();
+        }
+    }
+
+    public void CancelCountdown()
+    {
+        cts?.Cancel();
+    }
+                 */
+            }
+            //Ensure that only one button click is counted
+        }
+
+        void ManageDeactivateGateBox()
+        {
+            isGateOpenerActivated = false;
+            //Disable all the buttons
+            foreach (Button button in gateOpenerButtons)
+            {
+                button.interactable = false;
+            }
+            cncltnTknSrc?.Cancel();
+            gateOpenerBoxTr.DOScale(0, 0.3f).SetEase(Ease.InBack).OnComplete(()=> gateOpenerGO.SetActive(false));
+        }
+
+        void AssignGateOpeningButtonsColor()
+        {
+            if (gateKeySOs == null || gateOpenerButtons == null)
+            {
+                Debug.LogError("GateKeySOs, GateOpeningButton or both are null.");
+                return;
+            }
+            if (gateKeySOs.Count == 0 || gateOpenerButtons.Count == 0)
+            {
+                Debug.LogError("GateKeySOs, GateOpeningButton or both are empty.");
+                return;
+            }
+            if (gateKeySOs.Count != gateOpenerButtons.Count)
+            {
+                Debug.LogError("GateKeySOs and GateOpeningButtons are not same in quantity.");
+                return;
+            }
+
+            //Assigning colors of buttons. It can be done by getting UI image of those buttons
+            ColorBlock colorBlock = new ColorBlock();
+            for (int i = 0; i < gateOpenerButtons.Count; i++)
+            {
+                colorBlock = gateOpenerButtons[i].colors;
+                colorBlock.normalColor = gateKeySOs[i].GateColor;
+                gateOpenerButtons[i].colors = colorBlock;
+            }
+        }
+
+        void ManageGateOpenerButtonClick(int buttonIndex)
+        {
+            //TODO: Follow these instruction.
+            //Here button 
+            //Deactivate gate opener box
+            //Call a game manager method which will evaluate the matched key code
+            //Then game manager will throw an event
+            //Which will be evantually get notified by player controller and other if needed 
+        }
+
         void ManageTappedStartGameBtn()
         {
             startGameBtn.gameObject.SetActive(false);

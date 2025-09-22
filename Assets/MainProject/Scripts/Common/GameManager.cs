@@ -8,7 +8,7 @@ namespace Aftab
     {
         public static GameManager Instance {  get; private set; } //We can use zenject for clean architecture
 
-        ColorGate _currentColorGate = null; //We can use zenject for clean architecture
+        ColorGate currentColorGate = null; //We can use zenject for clean architecture
 
         public bool IsLevelStarted { get; private set; }
         public bool IsLevelCompleted { get; private set; }
@@ -16,6 +16,7 @@ namespace Aftab
         public bool IsAllowedInputForGateOpening { get; private set; }
 
         public event Action OnLevelStarted, OnLevelCompleted, OnLevelFailed, OnPlayerHit, OnPlayerFallingDown;
+        public event Action OnActivateColorGate;
 
         void Awake()
         {
@@ -34,20 +35,21 @@ namespace Aftab
         public void ManageAllowingGateOpening(bool allow, ColorGate colorGate)
         {
             IsAllowedInputForGateOpening = allow;
-            _currentColorGate = colorGate;
+            currentColorGate = colorGate;
+            OnActivateColorGate?.Invoke(); //TODO: At this moment, Player movement should be paused
             //If allow then,
             //Now, Show a UI message to press key (R for red, G for green, and B for blue)
             //Or, Open a UI panel with button showing different color.
         }
 
-        public bool CheckInputWithCurrentGateColorCode(GateColorCode colorCode, out Color matchedGateColor)
+        public bool CheckInputWithCurrentGateColorCode(GateKey colorCode, out Color matchedGateColor)
         {
             matchedGateColor = Color.white;
             bool isMatched = false;
-            if (colorCode == _currentColorGate.ThisGateColorCode)
+            if (colorCode == currentColorGate.ThisGateKeySO.GateKeyCode)
             {
                 //Matched the color code
-                matchedGateColor = _currentColorGate.ThisGateColor;
+                matchedGateColor = currentColorGate.ThisGateKeySO.GateColor;
                 OpenCurrentGate();
                 ResetGateOpeningAndCurrentColorGate();
                 isMatched = true;
@@ -59,14 +61,14 @@ namespace Aftab
         {
             //Disable instruction UI
             //Give an imoji effect along with a vfx effect, may be
-            if(_currentColorGate != null) _currentColorGate.OpenGate(); //TODO: Need to solve this. I mean decouple this. And implement Zenject
+            if(currentColorGate != null) currentColorGate.OpenGate(); //TODO: Need to solve this. I mean decouple this. And implement Zenject
             
         }
 
         void ResetGateOpeningAndCurrentColorGate()
         {
             IsAllowedInputForGateOpening = false;
-            _currentColorGate = null;
+            currentColorGate = null;
         }
 
         public void PlayerCollideWithGate()

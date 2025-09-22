@@ -3,37 +3,29 @@ using DG.Tweening;
 
 namespace Aftab
 {
-    public enum GateColorCode //We can manage this by creating scriptable object
-    {
-        //Y = Yellow, G = Green, B = Blue
-        Y =0, G = 1, B = 2
-    }
     public class ColorGate : MonoBehaviour //We can create this as modular by implementing interface
     {
         [SerializeField]
-        Color _gateColor;
+        GateKeySO gateKeySO;
         [SerializeField]
-        GateColorCode _gateColorCode;
+        Renderer renderer;
         [SerializeField]
-        Renderer _renderer;
+        Collider gateActivatorTrigger;
         [SerializeField]
-        Collider _gateActivatorTrigger;
+        Collider gateCollider;
         [SerializeField]
-        Collider _gateCollider;
-        [SerializeField]
-        Transform _gateTransform;
+        Transform gateTransform;
 
-        public GateColorCode ThisGateColorCode => _gateColorCode;
-        public Color ThisGateColor => _gateColor;
+        public GateKeySO ThisGateKeySO => gateKeySO;
 
         void Start()
         {
-            _renderer.material.color = _gateColor; //TODO: Need to optimize it by accesing shader property to change color of the material not instantiated material
+            renderer.material.color = gateKeySO.GateColor; //TODO: Need to optimize it by accesing shader property to change color of the material not instantiated material
         }
 
         public void ActivateGate()
         {
-            _gateActivatorTrigger.enabled = false;
+            gateActivatorTrigger.enabled = false;
             //Send a message to game manager that a color gate is activated of certain color.
             GameManager.Instance.ManageAllowingGateOpening(true, this);
             
@@ -41,9 +33,9 @@ namespace Aftab
 
         public void OpenGate()
         {
-            _gateCollider.enabled = false;
+            gateCollider.enabled = false;
             //Have a tween animation to open the gate
-            _gateTransform.DOLocalMoveY(_gateTransform.localPosition.y + 30, 1f).SetEase(Ease.OutSine)
+            gateTransform.DOLocalMoveY(gateTransform.localPosition.y + 30, 1f).SetEase(Ease.OutSine)
                 .OnComplete(()=> gameObject.SetActive(false));
             //_gateTransform.DOScale(0, 1f).SetEase(Ease.OutSine).OnComplete(()=> gameObject.SetActive(false));
 
