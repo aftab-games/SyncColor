@@ -96,7 +96,8 @@ namespace Aftab
             //TODO: Manage Button click of color gate button 
             for (int i = 0; i < gateOpenerButtons.Count; i++)
             {
-                gateOpenerButtons[i].onClick.AddListener(()=> ManageGateOpenerButtonClick(i));
+                int tempIndex = i;
+                gateOpenerButtons[i].onClick.AddListener(()=> ManageGateOpenerButtonClick(tempIndex));
             }
             //gameManager.OnLevelCompleted += () => ActivateLvlCompletedPanel();
             //gameManager.OnLevelFailed += ActivateLvlFailedPanel;
@@ -122,7 +123,8 @@ namespace Aftab
         {
             for (int i = 0; i < gateOpenerButtons.Count; i++)
             {
-                gateOpenerButtons[i].onClick.RemoveListener(() => ManageGateOpenerButtonClick(i));
+                int tempIndex = i;
+                gateOpenerButtons[i].onClick.RemoveListener(() => ManageGateOpenerButtonClick(tempIndex));
             }
             //gameManager.OnLevelCompleted -= ActivateLvlCompletedPanel;
             //gameManager.OnLevelFailed -= ActivateLvlFailedPanel;
@@ -148,7 +150,11 @@ namespace Aftab
             float countDownDuration = 3f;
             gateOpenerCountDownTMP.text = countDownDuration.ToString();
             gateOpenerGO.SetActive(true);
-            gateOpenerBoxTr.DOScale(1, 0.3f).SetEase(Ease.OutBounce);
+            gateOpenerBoxTr.DOScale(1, 0.3f).SetEase(Ease.OutBack);
+            foreach (Button button in gateOpenerButtons)
+            {
+                button.interactable = true;
+            }
             //Activate countdown with resetting for 3 seconds
             //ActivateCountDown();
             //Activate countdown in a async await or coroutine eventually in UniTask
@@ -162,7 +168,7 @@ namespace Aftab
                     while (countDownDuration > 0)
                     {
                         gateOpenerCountDownTMP.text = Mathf.CeilToInt(countDownDuration).ToString();
-                        gateOpenerCountDownTr.DOPunchScale(Vector3.one * 1.1f, 0.2f);
+                        gateOpenerCountDownTr.DOPunchScale(Vector3.one * 0.3f, 0.3f);
                         await Awaitable.WaitForSecondsAsync(1f, cncltnTknSrc.Token); // Wait for 1 second
                         countDownDuration--;
                     }
@@ -170,7 +176,7 @@ namespace Aftab
                 catch (OperationCanceledException)
                 {
                     Debug.Log("Countdown cancelled.");
-                    gateOpenerCountDownTMP.text = "!";
+                    //gateOpenerCountDownTMP.text = "!";
                 }
                 finally
                 {
@@ -179,47 +185,11 @@ namespace Aftab
                         //Deactivate box
                         ManageDeactivateGateBox();
                         //Resume player movement
+                        gameManager.ManageDeactivatedColorGateWithoutChooseOption();
                     }
                     cncltnTknSrc.Dispose();
                 }
             }
-            void ActivateCountDown()
-            {
-                
-                /*
-                 * public async UniTaskVoid StartCountdown() // Use UniTaskVoid for methods not returning a value
-    {
-        cts = new CancellationTokenSource();
-        float currentTime = countdownDuration;
-
-        try
-        {
-            while (currentTime > 0)
-            {
-                countdownText.text = Mathf.CeilToInt(currentTime).ToString();
-                await UniTask.Delay(System.TimeSpan.FromSeconds(1), cancellationToken: cts.Token); // Wait for 1 second
-                currentTime--;
-            }
-            countdownText.text = "GO!";
-        }
-        catch (OperationCanceledException)
-        {
-            Debug.Log("Countdown cancelled.");
-            countdownText.text = "Cancelled";
-        }
-        finally
-        {
-            cts.Dispose();
-        }
-    }
-
-    public void CancelCountdown()
-    {
-        cts?.Cancel();
-    }
-                 */
-            }
-            //Ensure that only one button click is counted
         }
 
         void ManageDeactivateGateBox()
@@ -264,12 +234,9 @@ namespace Aftab
 
         void ManageGateOpenerButtonClick(int buttonIndex)
         {
-            //TODO: Follow these instruction.
-            //Here button 
-            //Deactivate gate opener box
-            //Call a game manager method which will evaluate the matched key code
-            //Then game manager will throw an event
-            //Which will be evantually get notified by player controller and other if needed 
+            Debug.Log("Button Index: " + buttonIndex);
+            ManageDeactivateGateBox();
+            gameManager.ManageChooseGateColorOption(gateKeySOs[buttonIndex]);
         }
 
         void ManageTappedStartGameBtn()
@@ -341,3 +308,41 @@ namespace Aftab
         }
     }
 }
+
+/*void ActivateCountDown()
+{
+
+    
+     * public async UniTaskVoid StartCountdown() // Use UniTaskVoid for methods not returning a value
+{
+cts = new CancellationTokenSource();
+float currentTime = countdownDuration;
+
+try
+{
+while (currentTime > 0)
+{
+    countdownText.text = Mathf.CeilToInt(currentTime).ToString();
+    await UniTask.Delay(System.TimeSpan.FromSeconds(1), cancellationToken: cts.Token); // Wait for 1 second
+    currentTime--;
+}
+countdownText.text = "GO!";
+}
+catch (OperationCanceledException)
+{
+Debug.Log("Countdown cancelled.");
+countdownText.text = "Cancelled";
+}
+finally
+{
+cts.Dispose();
+}
+}
+
+public void CancelCountdown()
+{
+cts?.Cancel();
+}
+     
+}
+*/

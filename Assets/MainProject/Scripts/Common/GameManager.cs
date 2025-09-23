@@ -17,6 +17,8 @@ namespace Aftab
 
         public event Action OnLevelStarted, OnLevelCompleted, OnLevelFailed, OnPlayerHit, OnPlayerFallingDown;
         public event Action OnActivateColorGate;
+        public event Action<GateKeySO> OnChooseColorOption;
+        public event Action OnDeactivateColorGateWithoutChoose;
 
         void Awake()
         {
@@ -32,29 +34,26 @@ namespace Aftab
             IsLevelStarted = true;
         }
 
-        public void ManageAllowingGateOpening(bool allow, ColorGate colorGate)
+        public void ManageActivateGateOpening(bool allow, ColorGate colorGate)
         {
             IsAllowedInputForGateOpening = allow;
             currentColorGate = colorGate;
-            OnActivateColorGate?.Invoke(); //TODO: At this moment, Player movement should be paused
-            //If allow then,
-            //Now, Show a UI message to press key (R for red, G for green, and B for blue)
-            //Or, Open a UI panel with button showing different color.
+            OnActivateColorGate?.Invoke();
         }
 
-        public bool CheckInputWithCurrentGateColorCode(GateKey colorCode, out Color matchedGateColor)
+        public void ManageChooseGateColorOption(GateKeySO gateKeySO) //This sould be called from UiManager
         {
-            matchedGateColor = Color.white;
-            bool isMatched = false;
-            if (colorCode == currentColorGate.ThisGateKeySO.GateKeyCode)
+            if(currentColorGate.ThisGateKeySO.GateKeyCode == gateKeySO.GateKeyCode)
             {
-                //Matched the color code
-                matchedGateColor = currentColorGate.ThisGateKeySO.GateColor;
                 OpenCurrentGate();
                 ResetGateOpeningAndCurrentColorGate();
-                isMatched = true;
             }
-            return isMatched;
+            OnChooseColorOption?.Invoke(gateKeySO);
+        }
+
+        public void ManageDeactivatedColorGateWithoutChooseOption()
+        {
+            OnDeactivateColorGateWithoutChoose?.Invoke();
         }
 
         void OpenCurrentGate()

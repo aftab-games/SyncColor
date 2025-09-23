@@ -1,4 +1,4 @@
-using System.Diagnostics.Contracts;
+using DG.Tweening.Core.Easing;
 using UnityEngine;
 
 namespace Aftab
@@ -25,6 +25,8 @@ namespace Aftab
         int currentLane = 1; // 0 = Left, 1 = Center, 2 = Right
         Vector3 targetPosition = Vector3.zero;
         Vector3 targetVelocity = Vector3.zero;
+        Vector3 pausedVelocity = Vector3.zero;
+        Vector3 pausedAngularVelocity = Vector3.zero;
 
         [Header("Color Settings")]
         [SerializeField]
@@ -33,9 +35,8 @@ namespace Aftab
         TrailRenderer trailRenderer;
         [SerializeField]
         Color playerColor;
-        bool isMatchedColor = false;
-        Color matchedColor = Color.white;
 
+        GameManager gameManager;
         BallBreakingHandler ballBreakingHandler;
 
 
@@ -51,13 +52,20 @@ namespace Aftab
 
         void Start()
         {
-            GameManager.Instance.OnLevelStarted += ManageOnGameStarted;
+            gameManager = GameManager.Instance;
+            gameManager.OnLevelStarted += ManageOnGameStarted;
+            gameManager.OnActivateColorGate += PausePlayerMovement;
+            gameManager.OnChooseColorOption += ResumeMovementAndSetColor;
+            gameManager.OnDeactivateColorGateWithoutChoose += ResumePlayerMovement;
             distancefromGround = mainBodyRB.GetComponent<Collider>().bounds.extents.y + 0.1f;
         }
 
         void OnDisable()
         {
-            GameManager.Instance.OnLevelStarted -= ManageOnGameStarted;
+            gameManager.OnLevelStarted -= ManageOnGameStarted;
+            gameManager.OnActivateColorGate -= PausePlayerMovement;
+            gameManager.OnChooseColorOption -= ResumeMovementAndSetColor;
+            gameManager.OnDeactivateColorGateWithoutChoose -= ResumePlayerMovement;
         }
 
         void ManageOnGameStarted()
@@ -67,7 +75,7 @@ namespace Aftab
 
         void Update()
         {
-            if(GameManager.Instance.IsLevelCompleted || GameManager.Instance.IsLevelCompleted) return;
+            if(gameManager.IsLevelCompleted || gameManager.IsLevelCompleted) return;
             ManageInput(); //This needs to be moved to InputManager script
         }
 
@@ -96,45 +104,31 @@ namespace Aftab
                 canJump = true;
             }
 
-            if (GameManager.Instance.IsAllowedInputForGateOpening)
-            {
-                isMatchedColor = false;
-                matchedColor = Color.white;
-                if (Input.GetKeyDown(KeyCode.Y))
-                {
-                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateKey.Y, out matchedColor);
-                }
-                else if (Input.GetKeyDown(KeyCode.G))
-                {
-                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateKey.G, out matchedColor);
-                }
-                else if (Input.GetKeyDown(KeyCode.B))
-                {
-                    isMatchedColor = GameManager.Instance.CheckInputWithCurrentGateColorCode(GateKey.B, out matchedColor);
-                }
-
-                if (isMatchedColor)
-                {
-                    SetBodyAndTrailColor(matchedColor);
-                }
-            }
         }
 
-        void ResumeMovementAndSetColor(Color color)
+        void ResumeMovementAndSetColor(GateKeySO gateKeySO)
         {
             ResumePlayerMovement();
-            SetBodyAndTrailColor(color);
+            SetBodyAndTrailColor(gateKeySO.GateColor);
         }
 
         void PausePlayerMovement()
         {
             //TODO: Store current state, Physics states. These state will be usefull when resume the movement
             //Halt the movement
+            canMove = false;
+            pausedVelocity = mainBodyRB.linearVelocity;
+            pausedAngularVelocity = mainBodyRB.angularVelocity;
+            mainBodyRB.isKinematic = true;
         }
 
         void ResumePlayerMovement()
         {
             //TODO: Resume player movement using stored physcis states
+            mainBodyRB.isKinematic = false;
+            mainBodyRB.linearVelocity = pausedVelocity;
+            mainBodyRB.angularVelocity = pausedAngularVelocity;
+            canMove = true;
         }
 
         void ManageForwardAndUpMovement()

@@ -27,7 +27,7 @@ namespace Aftab
         {
             gateActivatorTrigger.enabled = false;
             //Send a message to game manager that a color gate is activated of certain color.
-            GameManager.Instance.ManageAllowingGateOpening(true, this);
+            GameManager.Instance.ManageActivateGateOpening(true, this);
             
         }
 
