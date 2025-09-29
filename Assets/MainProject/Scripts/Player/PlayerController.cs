@@ -1,5 +1,5 @@
-using DG.Tweening.Core.Easing;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Aftab
 {
@@ -89,16 +89,16 @@ namespace Aftab
         {
             // OLD INPUT SYSTEM: Will Replace with New Input System later
             // TODO: Polish the movement system
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+            if (Keyboard.current.aKey.wasPressedThisFrame || Keyboard.current.leftArrowKey.wasPressedThisFrame)
             {
                 ChangeLane(-1);
             }
-            else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            else if (Keyboard.current.dKey.wasPressedThisFrame || Keyboard.current.rightArrowKey.wasPressedThisFrame)
             {
                 ChangeLane(1);
             }
 
-            else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+            else if (Keyboard.current.wKey.wasPressedThisFrame || Keyboard.current.upArrowKey.wasPressedThisFrame)
             {
                 //Jump
                 canJump = true;
