@@ -4,16 +4,18 @@ namespace Aftab
 {
     public class PlayerVisualHandler : MonoBehaviour
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-        
-        }
+        [SerializeField]
+        Renderer playerRenderer;
 
-        // Update is called once per frame
-        void Update()
+        public void SetBodyColor(Color color)
         {
-        
+            if (playerRenderer != null)
+            {
+                MaterialPropertyBlock mpBlock = new MaterialPropertyBlock();
+                playerRenderer.GetPropertyBlock(mpBlock);
+                mpBlock.SetColor("_BaseColor", color);
+                playerRenderer.SetPropertyBlock(mpBlock);
+            }
         }
     }
 }

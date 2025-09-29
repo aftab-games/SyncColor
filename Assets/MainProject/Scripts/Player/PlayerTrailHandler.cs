@@ -4,16 +4,15 @@ namespace Aftab
 {
     public class PlayerTrailHandler : MonoBehaviour
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        [SerializeField]
+        TrailRenderer trailRenderer;
+        public void SetTrailColor(Color color)
         {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
+            if(trailRenderer == null) return;
+            MaterialPropertyBlock mpBlock = new MaterialPropertyBlock();
+            trailRenderer.GetPropertyBlock(mpBlock);
+            mpBlock.SetColor("_BaseColor", color);
+            trailRenderer.SetPropertyBlock(mpBlock);
         }
     }
 }

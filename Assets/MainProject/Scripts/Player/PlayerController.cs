@@ -5,7 +5,7 @@ namespace Aftab
 {
     public class PlayerController : MonoBehaviour
     {
-        public static PlayerController Instance { get; private set; }
+        public static PlayerController Instance { get; private set; } //Need to get rid of the singleton form of this
         [Header("Movement Settings")]
         [SerializeField]
         Rigidbody mainBodyRB;
@@ -75,7 +75,7 @@ namespace Aftab
 
         void Update()
         {
-            if(gameManager.IsLevelCompleted || gameManager.IsLevelCompleted) return;
+            if(gameManager.IsLevelCompleted || gameManager.IsLevelFailed) return;
             ManageInput(); //This needs to be moved to InputManager script
         }
 
