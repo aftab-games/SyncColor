@@ -24,7 +24,7 @@ namespace Aftab
         {
             Instance = this;
             Application.targetFrameRate = 60;
-            Input.multiTouchEnabled = false;
+            //Input.multiTouchEnabled = false; // it won't work in new input system environment
             IsLevelStarted = false;
         }
 

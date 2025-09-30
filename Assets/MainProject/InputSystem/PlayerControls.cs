@@ -48,39 +48,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": ""KeyboardWASD"",
-                    ""id"": ""b24d5e75-7403-46ea-abf0-27cfecef9700"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""85e7f020-8fab-4c6f-ae9c-7070090df74e"",
-                    ""path"": ""<Keyboard>/#(A)"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""71e96078-1abf-43b0-9c7d-e77cfaacca63"",
-                    ""path"": ""<Keyboard>/#(D)"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""KeyboardArrow"",
                     ""id"": ""f80ad10e-dea5-47ef-8b40-e2b63b23d77a"",
                     ""path"": ""2DVector"",
@@ -92,7 +59,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""left"",
+                    ""name"": ""Left"",
                     ""id"": ""d11ef8c3-f251-40ef-b80c-d72ed4ca097d"",
                     ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
@@ -103,7 +70,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""right"",
+                    ""name"": ""Right"",
                     ""id"": ""e7373f99-4cb0-4f50-933b-66cf4e4dcbed"",
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
@@ -126,10 +93,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""249efae4-55a1-4274-81af-a02767b2cb3f"",
-                    ""path"": ""<Pointer>/delta"",
+                    ""id"": ""a39ed147-3b68-47e6-b7b3-307ea1cf21a8"",
+                    ""path"": ""<Touchscreen>/primaryTouch/delta"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""ScaleVector2(x=0.1,y=0.1)"",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
@@ -139,17 +106,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""a6b1fce2-03ce-4534-b72c-55e7badb0e46"",
                     ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3b8d86e2-bd1b-4d51-9434-803713b93ee1"",
-                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

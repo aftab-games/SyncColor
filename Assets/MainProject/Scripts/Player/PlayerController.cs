@@ -75,14 +75,14 @@ namespace Aftab
 
         void Update()
         {
-            if(gameManager.IsLevelCompleted || gameManager.IsLevelFailed) return;
-            ManageInput(); //This needs to be moved to InputManager script
+            //if(gameManager.IsLevelCompleted || gameManager.IsLevelFailed) return;
+            //ManageInput(); //This needs to be moved to InputManager script
         }
 
         void FixedUpdate()
         {
-            ManageForwardAndUpMovement();
-            ManageSideWiseMovement();
+            //ManageForwardAndUpMovement();
+            //ManageSideWiseMovement();
         }
 
         void ManageInput()

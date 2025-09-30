@@ -32,7 +32,7 @@ namespace Aftab
             //List<Transform> childTransforms = brokenBallTr.GetComponentsInChildren<Transform>().ToList<Transform>();
             foreach (Transform childTr in brokenBallTr)
             {
-                Debug.Log(childTr.name);
+                //Debug.Log(childTr.name);
                 MeshRenderer meshRenderer = childTr.GetComponent<MeshRenderer>();
                 meshRenderer.material.color = currentBallColor;
                 Rigidbody rigidbody = childTr.GetComponent<Rigidbody>();

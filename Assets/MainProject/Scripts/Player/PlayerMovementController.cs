@@ -1,3 +1,5 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,7 +20,8 @@ namespace Aftab
         float jumpSpeed = 15.0f;
         float distancefromGround;
         bool canMove = false;
-        float movementBound = 5.0f;
+        bool canJump = false;
+        float boundX = 5.0f;
         Vector3 targetPosition = Vector3.zero;
         Vector3 targetVelocity = Vector3.zero;
         Vector3 pausedVelocity = Vector3.zero;
@@ -34,6 +37,7 @@ namespace Aftab
         private void Awake()
         {
             canMove = false;
+            moveInput = Vector3.zero;
             playerControls = new PlayerControls();
         }
 
@@ -43,9 +47,9 @@ namespace Aftab
             gameManager.OnLevelStarted += OnLevelStarted;
             gameManager.OnLevelCompleted += OnLevelCompleted;
             gameManager.OnLevelFailed += OnLevelFailed;
-            gameManager.OnActivateColorGate += OnPausePlayerMovement;
-            //gameManager.OnChooseColorOption += ResumePlayerMovement; //TODO: Need to solve this
-            gameManager.OnDeactivateColorGateWithoutChoose += OnResumePlayerMovement;
+            gameManager.OnActivateColorGate += PausePlayerMovement;
+            gameManager.OnChooseColorOption += ManageOnChooseColorOption;
+            gameManager.OnDeactivateColorGateWithoutChoose += ResumePlayerMovement;
             distancefromGround = mainBodyRB.GetComponent<Collider>().bounds.extents.y + 0.1f;
             moveAction = playerControls.Player.Move;
             jumpAction = playerControls.Player.Jump;
@@ -53,6 +57,7 @@ namespace Aftab
             jumpAction.Enable();
             moveAction.performed += OnMoveActionPerformed;
             jumpAction.performed += OnJumpActionPerformed;
+            moveAction.canceled += OnMoveActionCancelled;
         }
 
         private void OnDisable()
@@ -60,11 +65,12 @@ namespace Aftab
             gameManager.OnLevelStarted -= OnLevelStarted;
             gameManager.OnLevelCompleted += OnLevelCompleted;
             gameManager.OnLevelFailed += OnLevelFailed;
-            gameManager.OnActivateColorGate -= OnPausePlayerMovement;
-            //gameManager.OnChooseColorOption -= ResumePlayerMovement; // ResumeMovementAndSetColor; //TODO: Need to solve this
-            gameManager.OnDeactivateColorGateWithoutChoose -= OnResumePlayerMovement;
+            gameManager.OnActivateColorGate -= PausePlayerMovement;
+            gameManager.OnChooseColorOption -= ManageOnChooseColorOption;
+            gameManager.OnDeactivateColorGateWithoutChoose -= ResumePlayerMovement;
             moveAction.performed -= OnMoveActionPerformed;
             jumpAction.performed -= OnJumpActionPerformed;
+            moveAction.canceled -= OnMoveActionCancelled;
             moveAction.Disable();
             jumpAction.Disable();
         }
@@ -85,7 +91,7 @@ namespace Aftab
             canMove = false;
         }
 
-        private void OnPausePlayerMovement()
+        private void PausePlayerMovement()
         {
             //TODO: Store current state, Physics states. These state will be usefull when resume the movement
             //Halt the movement
@@ -95,7 +101,7 @@ namespace Aftab
             mainBodyRB.isKinematic = true;
         }
 
-        private void OnResumePlayerMovement()
+        private void ResumePlayerMovement()
         {
             //TODO: Resume player movement using stored physcis states
             mainBodyRB.isKinematic = false;
@@ -104,39 +110,106 @@ namespace Aftab
             canMove = true;
         }
 
-        void OnJumpActionPerformed(InputAction.CallbackContext ctx)
+        private void ManageOnChooseColorOption(GateKeySO gateKeySo)
         {
-            Debug.Log(" Jump Action: " + ctx.ToString());
-            if (!canMove) return;
-            if (!IsGrounded()) return;
-            mainBodyRB.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+            ResumePlayerMovement();
         }
 
-        void OnMoveActionPerformed(InputAction.CallbackContext ctx)
+        private void OnJumpActionPerformed(InputAction.CallbackContext ctx)
+        {
+            if (!canMove) return;
+            if (!IsGrounded()) return;
+            canJump = true;
+        }
+
+        private void OnMoveActionPerformed(InputAction.CallbackContext ctx)
         {
             moveInput = ctx.ReadValue<Vector2>();
-            Debug.Log("Move Input: " + moveInput.ToString());
+            //Debug.Log("Move Input: " + moveInput.ToString());
+        }
+
+        private void OnMoveActionCancelled(InputAction.CallbackContext ctx)
+        {
+            moveInput = Vector2.zero;
         }
 
         #endregion
 
-        private void Update()
-        {
-            
-        }
-
         private void FixedUpdate()
         {
-            
+            ManageMovement();
         }
 
-        void ManageInput()
+        private void ManageMovement()
         {
             if (!canMove) return;
+            //if(CanMoveSideWise()) targetVelocity.x = moveInput.x * sideSpeed * Time.fixedDeltaTime;
+            targetVelocity.x = moveInput.x * sideSpeed * Time.fixedDeltaTime;
 
+            if (canJump) Jump();
+            else targetVelocity.y = mainBodyRB.linearVelocity.y;
+
+            targetVelocity.z = forwardSpeed; //Vector3 forwardMovement = transform.forward * forwardSpeed; //Vector3 newVelocity = new Vector3(xVelocity.x + forwardMovement.x, rb.velocity.y, xVelocity.z + forwardMovement.z);
+            mainBodyRB.linearVelocity = targetVelocity;
+
+            Vector3 clampedPosition = mainBodyRB.position;
+            clampedPosition.x = Mathf.Clamp(clampedPosition.x, -boundX, boundX);
+            mainBodyRB.MovePosition(clampedPosition);
+
+            //ManageJump();
+            //SideMovement();
+            //ClampXPos();
+
+            void Jump()
+            {
+                targetVelocity.y = jumpSpeed;
+                canJump = false;
+            }
+
+            void ManageJump()
+            {
+                if (!canJump) return;
+                mainBodyRB.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+                canJump = false;
+            }
+
+            void SideMovement()
+            {
+                targetPosition.x = Mathf.Clamp(mainBodyRB.position.x + moveInput.x, -boundX, boundX);
+                targetPosition.y = mainBodyRB.position.y;
+                targetPosition.z = mainBodyRB.position.z;
+                Vector3 newPos = Vector3.MoveTowards(mainBodyRB.position, targetPosition, sideSpeed * Time.fixedDeltaTime);
+                //mainBodyRB.position = Vector3.MoveTowards(mainBodyRB.position, targetPosition, sideSpeed * Time.fixedDeltaTime);
+                mainBodyRB.MovePosition(newPos);
+            }
+
+            void ClampXPos()
+            {
+                Vector3 currentPosition = mainBodyRB.position;
+                if(currentPosition.x >= boundX || currentPosition.x <= -boundX)
+                {
+                    currentPosition.x = Mathf.Clamp(currentPosition.x, -boundX, boundX);
+                    mainBodyRB.position = currentPosition;
+                }
+            }
+
+            bool CanMoveSideWise()
+            {
+                float currentPositionX = mainBodyRB.position.x;
+                //return moveInput.x > 0 && currentPositionX >= (boundX - 0.5f) || moveInput.x < 0 && currentPositionX <= -(boundX - 0.5f) ? false : true;
+                if (moveInput.x > 0 && currentPositionX >= boundX)
+                {
+                    return false;
+                }
+                else if(moveInput.x < 0 && currentPositionX <= -boundX)
+                {
+                    return false;
+                }
+                return true;
+            }
         }
 
-        bool IsGrounded() => Physics.Raycast(mainBodyRB.transform.position, Vector3.down, distancefromGround, groundLayer);
+        private bool IsGrounded() => Physics.Raycast(mainBodyRB.transform.position, Vector3.down, distancefromGround, groundLayer);
 
     }
 }
