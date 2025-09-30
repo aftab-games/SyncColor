@@ -143,13 +143,13 @@ namespace Aftab
         private void ManageMovement()
         {
             if (!canMove) return;
-            //if(CanMoveSideWise()) targetVelocity.x = moveInput.x * sideSpeed * Time.fixedDeltaTime;
-            targetVelocity.x = moveInput.x * sideSpeed * Time.fixedDeltaTime;
-
-            if (canJump) Jump();
-            else targetVelocity.y = mainBodyRB.linearVelocity.y;
-
+            
+            ManageJumpVel();
             targetVelocity.z = forwardSpeed; //Vector3 forwardMovement = transform.forward * forwardSpeed; //Vector3 newVelocity = new Vector3(xVelocity.x + forwardMovement.x, rb.velocity.y, xVelocity.z + forwardMovement.z);
+
+            //if(CanMoveSideWise()) targetVelocity.x = moveInput.x * sideSpeed * Time.fixedDeltaTime;
+            float inputXClamped = Mathf.Clamp(moveInput.x, -1.0f, 1.0f);
+            targetVelocity.x = inputXClamped * sideSpeed * Time.fixedDeltaTime;
             mainBodyRB.linearVelocity = targetVelocity;
 
             Vector3 clampedPosition = mainBodyRB.position;
@@ -160,10 +160,15 @@ namespace Aftab
             //SideMovement();
             //ClampXPos();
 
-            void Jump()
+            void ManageJumpVel()
             {
-                targetVelocity.y = jumpSpeed;
-                canJump = false;
+                //Need to make it more snappy. i.e: When going down, we can add force to down in forcemode.accelerate
+                if (canJump)
+                {
+                    targetVelocity.y = jumpSpeed;
+                    canJump = false;
+                }
+                else targetVelocity.y = mainBodyRB.linearVelocity.y;
             }
 
             void ManageJump()
