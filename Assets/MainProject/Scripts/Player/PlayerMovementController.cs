@@ -56,8 +56,8 @@ namespace Aftab
             moveAction.Enable();
             jumpAction.Enable();
             moveAction.performed += OnMoveActionPerformed;
-            jumpAction.performed += OnJumpActionPerformed;
             moveAction.canceled += OnMoveActionCancelled;
+            jumpAction.performed += OnJumpActionPerformed;
         }
 
         private void OnDisable()
@@ -69,8 +69,8 @@ namespace Aftab
             gameManager.OnChooseColorOption -= ManageOnChooseColorOption;
             gameManager.OnDeactivateColorGateWithoutChoose -= ResumePlayerMovement;
             moveAction.performed -= OnMoveActionPerformed;
-            jumpAction.performed -= OnJumpActionPerformed;
             moveAction.canceled -= OnMoveActionCancelled;
+            jumpAction.performed -= OnJumpActionPerformed;
             moveAction.Disable();
             jumpAction.Disable();
         }
@@ -139,7 +139,7 @@ namespace Aftab
         {
             ManageMovement();
         }
-
+        float currVel;
         private void ManageMovement()
         {
             if (!canMove) return;
@@ -147,18 +147,9 @@ namespace Aftab
             ManageJumpVel();
             targetVelocity.z = forwardSpeed;
 
-            if (CanMoveSideWise())
-            {
-                float inputXClamped = Mathf.Clamp(moveInput.x * Time.fixedDeltaTime, -1.0f, 1.0f);
-                targetVelocity.x = inputXClamped * sideSpeed;
-                mainBodyRB.linearVelocity = targetVelocity;
-            }
-            else
-            {
-                Vector3 clampedPosition = mainBodyRB.position;
-                clampedPosition.x = Mathf.Clamp(clampedPosition.x, -boundX, boundX);
-                mainBodyRB.MovePosition(clampedPosition);
-            }
+            targetVelocity.x = mainBodyRB.linearVelocity.x;
+            mainBodyRB.linearVelocity = targetVelocity;
+            SideWiseMovementMove();
 
             void ManageJumpVel()
             {
@@ -169,6 +160,19 @@ namespace Aftab
                     canJump = false;
                 }
                 else targetVelocity.y = mainBodyRB.linearVelocity.y;
+            }
+
+            void SideWiseMovementMove()
+            {
+                if (!CanMoveSideWise()) return;
+
+                Vector3 trgtPos = mainBodyRB.position;
+                
+                trgtPos.x = Mathf.Clamp(Mathf.SmoothDamp(trgtPos.x, trgtPos.x + moveInput.x * 5,
+                    ref currVel, 0.2f, 100, Time.fixedDeltaTime), -boundX, boundX); //trgtPos.x = Mathf.Clamp(Mathf.MoveTowards(trgtPos.x, trgtPos.x + moveInput.x, sideSpeed * Time.fixedDeltaTime), -boundX, boundX);
+
+                //Debug.Log($"CurrVel: {currVel} , MaxSpeed: {sideSpeed}");
+                mainBodyRB.MovePosition(trgtPos);
             }
 
             bool CanMoveSideWise()
@@ -184,6 +188,22 @@ namespace Aftab
                     return false;
                 }
                 return true;
+            }
+
+            void SideWiseMovementVelAndMovePos()
+            {
+                if (CanMoveSideWise())
+                {
+                    float inputXClamped = Mathf.Clamp(moveInput.x * Time.fixedDeltaTime, -1.0f, 1.0f);
+                    targetVelocity.x = inputXClamped * sideSpeed;
+                    mainBodyRB.linearVelocity = targetVelocity;
+                }
+                else
+                {
+                    Vector3 clampedPosition = mainBodyRB.position;
+                    clampedPosition.x = Mathf.Clamp(clampedPosition.x, -boundX, boundX);
+                    mainBodyRB.MovePosition(clampedPosition);
+                }
             }
         }
 
