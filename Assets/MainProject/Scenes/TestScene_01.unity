@@ -12797,7 +12797,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   forwardSpeed: 20
-  sideSpeed: 100
+  sideSpeed: 500
   jumpSpeed: 15
 --- !u!1 &1886639241
 GameObject:

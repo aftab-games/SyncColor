@@ -145,57 +145,30 @@ namespace Aftab
             if (!canMove) return;
             
             ManageJumpVel();
-            targetVelocity.z = forwardSpeed; //Vector3 forwardMovement = transform.forward * forwardSpeed; //Vector3 newVelocity = new Vector3(xVelocity.x + forwardMovement.x, rb.velocity.y, xVelocity.z + forwardMovement.z);
+            targetVelocity.z = forwardSpeed;
 
-            //if(CanMoveSideWise()) targetVelocity.x = moveInput.x * sideSpeed * Time.fixedDeltaTime;
-            float inputXClamped = Mathf.Clamp(moveInput.x, -1.0f, 1.0f);
-            targetVelocity.x = inputXClamped * sideSpeed * Time.fixedDeltaTime;
-            mainBodyRB.linearVelocity = targetVelocity;
-
-            Vector3 clampedPosition = mainBodyRB.position;
-            clampedPosition.x = Mathf.Clamp(clampedPosition.x, -boundX, boundX);
-            mainBodyRB.MovePosition(clampedPosition);
-
-            //ManageJump();
-            //SideMovement();
-            //ClampXPos();
+            if (CanMoveSideWise())
+            {
+                float inputXClamped = Mathf.Clamp(moveInput.x * Time.fixedDeltaTime, -1.0f, 1.0f);
+                targetVelocity.x = inputXClamped * sideSpeed;
+                mainBodyRB.linearVelocity = targetVelocity;
+            }
+            else
+            {
+                Vector3 clampedPosition = mainBodyRB.position;
+                clampedPosition.x = Mathf.Clamp(clampedPosition.x, -boundX, boundX);
+                mainBodyRB.MovePosition(clampedPosition);
+            }
 
             void ManageJumpVel()
             {
-                //Need to make it more snappy. i.e: When going down, we can add force to down in forcemode.accelerate
+                //TODO: Need to make it more snappy. i.e: When going down, we can add force to down in forcemode.accelerate
                 if (canJump)
                 {
                     targetVelocity.y = jumpSpeed;
                     canJump = false;
                 }
                 else targetVelocity.y = mainBodyRB.linearVelocity.y;
-            }
-
-            void ManageJump()
-            {
-                if (!canJump) return;
-                mainBodyRB.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
-                canJump = false;
-            }
-
-            void SideMovement()
-            {
-                targetPosition.x = Mathf.Clamp(mainBodyRB.position.x + moveInput.x, -boundX, boundX);
-                targetPosition.y = mainBodyRB.position.y;
-                targetPosition.z = mainBodyRB.position.z;
-                Vector3 newPos = Vector3.MoveTowards(mainBodyRB.position, targetPosition, sideSpeed * Time.fixedDeltaTime);
-                //mainBodyRB.position = Vector3.MoveTowards(mainBodyRB.position, targetPosition, sideSpeed * Time.fixedDeltaTime);
-                mainBodyRB.MovePosition(newPos);
-            }
-
-            void ClampXPos()
-            {
-                Vector3 currentPosition = mainBodyRB.position;
-                if(currentPosition.x >= boundX || currentPosition.x <= -boundX)
-                {
-                    currentPosition.x = Mathf.Clamp(currentPosition.x, -boundX, boundX);
-                    mainBodyRB.position = currentPosition;
-                }
             }
 
             bool CanMoveSideWise()

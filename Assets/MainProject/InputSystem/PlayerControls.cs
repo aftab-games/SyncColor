@@ -96,7 +96,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""id"": ""a39ed147-3b68-47e6-b7b3-307ea1cf21a8"",
                     ""path"": ""<Touchscreen>/primaryTouch/delta"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=0.1,y=0.1)"",
+                    ""processors"": ""ScaleVector2(x=0.08,y=0.08)"",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
