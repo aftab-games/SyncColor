@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Aftab
@@ -9,27 +7,30 @@ namespace Aftab
         [Header("Settings:")]
         [SerializeField]
         GameObject brokenPiecesParentGO;
+        [SerializeField]
+        PlayerVisualHandler playerVisualHandler;
 
-        public void ManageBallBreak()
+        private void Start()
         {
-            //TODO: Instantiate prefab
+            GameManager.Instance.OnPlayerHit += ManageBallBreak;
+        }
+
+        private void OnDisable()
+        {
+            GameManager.Instance.OnPlayerHit += ManageBallBreak;
+        }
+
+        void ManageBallBreak()
+        {
             Transform brokenBallTr = Instantiate(brokenPiecesParentGO, transform).transform;
-            //TODO: Place inside the player controller. I mean make the instantiated object as a child of this object
             brokenBallTr.SetParent(transform);
-            Transform ballMainBodyTr = PlayerController.Instance.GetBallTransform();
+            Transform ballMainBodyTr = GameManager.Instance.BallMainBodyTr;
             
             brokenBallTr.localPosition = ballMainBodyTr.localPosition;
             brokenBallTr.localRotation = ballMainBodyTr.localRotation;
             brokenBallTr.localScale = ballMainBodyTr.localScale;
-            //TODO: Get currentballColor
-            Color currentBallColor = PlayerController.Instance.GetPlayerColor();
-            //TODO: Deactivate Ball Main Transform
+            Color currentBallColor = playerVisualHandler.GetPlayerColor();
             ballMainBodyTr.gameObject.SetActive(false);
-            //TODO: Get all the mesh renderer
-            //TODO: Assign current ball color to all the renderer
-            //TODO: Get all the rigidbody insided
-            //TODO: Give an explosion force or custom force
-            //List<Transform> childTransforms = brokenBallTr.GetComponentsInChildren<Transform>().ToList<Transform>();
             foreach (Transform childTr in brokenBallTr)
             {
                 //Debug.Log(childTr.name);

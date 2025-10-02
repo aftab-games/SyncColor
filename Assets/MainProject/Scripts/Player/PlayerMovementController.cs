@@ -22,6 +22,7 @@ namespace Aftab
         bool canMove = false;
         bool canJump = false;
         float boundX = 5.0f;
+        float currVelRef;
         Vector3 targetPosition = Vector3.zero;
         Vector3 targetVelocity = Vector3.zero;
         Vector3 pausedVelocity = Vector3.zero;
@@ -44,13 +45,15 @@ namespace Aftab
         private void Start()
         {
             gameManager = GameManager.Instance;
-            gameManager.OnLevelStarted += OnLevelStarted;
+            gameManager.OnLevelStarted += MakeCanMoveTrue;
             gameManager.OnLevelCompleted += OnLevelCompleted;
-            gameManager.OnLevelFailed += OnLevelFailed;
+            gameManager.OnPlayerFallingDown += MakeCanMoveFasle;
+            gameManager.OnPlayerHit += StopBallMovement;
             gameManager.OnActivateColorGate += PausePlayerMovement;
             gameManager.OnChooseColorOption += ManageOnChooseColorOption;
             gameManager.OnDeactivateColorGateWithoutChoose += ResumePlayerMovement;
             distancefromGround = mainBodyRB.GetComponent<Collider>().bounds.extents.y + 0.1f;
+            //Input System
             moveAction = playerControls.Player.Move;
             jumpAction = playerControls.Player.Jump;
             moveAction.Enable();
@@ -62,12 +65,14 @@ namespace Aftab
 
         private void OnDisable()
         {
-            gameManager.OnLevelStarted -= OnLevelStarted;
-            gameManager.OnLevelCompleted += OnLevelCompleted;
-            gameManager.OnLevelFailed += OnLevelFailed;
+            gameManager.OnLevelStarted -= MakeCanMoveTrue;
+            gameManager.OnLevelCompleted -= OnLevelCompleted;
+            gameManager.OnPlayerFallingDown -= MakeCanMoveFasle;
+            gameManager.OnPlayerHit -= StopBallMovement;
             gameManager.OnActivateColorGate -= PausePlayerMovement;
             gameManager.OnChooseColorOption -= ManageOnChooseColorOption;
             gameManager.OnDeactivateColorGateWithoutChoose -= ResumePlayerMovement;
+            //Input System
             moveAction.performed -= OnMoveActionPerformed;
             moveAction.canceled -= OnMoveActionCancelled;
             jumpAction.performed -= OnJumpActionPerformed;
@@ -76,17 +81,19 @@ namespace Aftab
         }
 
         #region Event Actions
-        private void OnLevelStarted()
+        
+        private void OnLevelCompleted()
+        {
+            StopBallMovement();
+        }
+
+
+        private void MakeCanMoveTrue()
         {
             canMove = true;
         }
 
-        private void OnLevelCompleted()
-        {
-            canMove = false;
-        }
-
-        private void OnLevelFailed()
+        private void MakeCanMoveFasle()
         {
             canMove = false;
         }
@@ -98,6 +105,8 @@ namespace Aftab
             canMove = false;
             pausedVelocity = mainBodyRB.linearVelocity;
             pausedAngularVelocity = mainBodyRB.angularVelocity;
+            mainBodyRB.linearVelocity = Vector3.zero;
+            mainBodyRB.angularVelocity = Vector3.zero;
             mainBodyRB.isKinematic = true;
         }
 
@@ -110,7 +119,14 @@ namespace Aftab
             canMove = true;
         }
 
-        private void ManageOnChooseColorOption(GateKeySO gateKeySo)
+        private void StopBallMovement() //At the level end
+        {
+            MakeCanMoveFasle();
+            mainBodyRB.linearVelocity = Vector3.zero;
+            mainBodyRB.angularVelocity = Vector3.zero;
+        }
+
+        private void ManageOnChooseColorOption(GateKeySO gateKeySo) //TODO: This need to be solved. Player movement doesn't need to know about GateKeySO
         {
             ResumePlayerMovement();
         }
@@ -139,7 +155,7 @@ namespace Aftab
         {
             ManageMovement();
         }
-        float currVel;
+        
         private void ManageMovement()
         {
             if (!canMove) return;
@@ -168,7 +184,7 @@ namespace Aftab
                 Vector3 trgtPos = mainBodyRB.position;
                 
                 trgtPos.x = Mathf.Clamp(Mathf.SmoothDamp(mainBodyRB.position.x, trgtPos.x + moveInput.x,
-                    ref currVel, 0.075f, 100, Time.fixedDeltaTime), -boundX, boundX); //trgtPos.x = Mathf.Clamp(Mathf.MoveTowards(trgtPos.x, trgtPos.x + moveInput.x, sideSpeed * Time.fixedDeltaTime), -boundX, boundX);
+                    ref currVelRef, 0.075f, 100, Time.fixedDeltaTime), -boundX, boundX); //trgtPos.x = Mathf.Clamp(Mathf.MoveTowards(trgtPos.x, trgtPos.x + moveInput.x, sideSpeed * Time.fixedDeltaTime), -boundX, boundX);
 
                 //Debug.Log($"CurrVel: {currVel} , MaxSpeed: {sideSpeed}");
                 mainBodyRB.MovePosition(trgtPos);
@@ -189,21 +205,6 @@ namespace Aftab
                 return true;
             }
 
-            void SideWiseMovementVelAndMovePos()
-            {
-                if (CanMoveSideWise())
-                {
-                    float inputXClamped = Mathf.Clamp(moveInput.x * Time.fixedDeltaTime, -1.0f, 1.0f);
-                    targetVelocity.x = inputXClamped * sideSpeed;
-                    mainBodyRB.linearVelocity = targetVelocity;
-                }
-                else
-                {
-                    Vector3 clampedPosition = mainBodyRB.position;
-                    clampedPosition.x = Mathf.Clamp(clampedPosition.x, -boundX, boundX);
-                    mainBodyRB.MovePosition(clampedPosition);
-                }
-            }
         }
 
         private bool IsGrounded() => Physics.Raycast(mainBodyRB.transform.position, Vector3.down, distancefromGround, groundLayer);

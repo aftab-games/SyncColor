@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Aftab
 {
-    public enum GateKey //We can manage this by creating scriptable object
+    public enum GateKey //TODO: This needs to be solved. May be we do not need this extra enum, instead we can use SO info
     {
         //Y = Yellow, G = Green, B = Blue
         Y = 0, G = 1, B = 2

@@ -234,7 +234,7 @@ namespace Aftab
 
         void ManageGateOpenerButtonClick(int buttonIndex)
         {
-            Debug.Log("Button Index: " + buttonIndex);
+            //Debug.Log("Button Index: " + buttonIndex);
             ManageDeactivateGateBox();
             gameManager.ManageChooseGateColorOption(gateKeySOs[buttonIndex]);
         }

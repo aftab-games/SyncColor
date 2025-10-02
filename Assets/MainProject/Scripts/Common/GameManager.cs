@@ -13,7 +13,7 @@ namespace Aftab
         public bool IsLevelStarted { get; private set; }
         public bool IsLevelCompleted { get; private set; }
         public bool IsLevelFailed { get; private set; }
-        public bool IsAllowedInputForGateOpening { get; private set; }
+        public Transform BallMainBodyTr { get; set; } //TODO: This should be solved. Not sure if ball body transform should be Get from the GameManager
 
         public event Action OnLevelStarted, OnLevelCompleted, OnLevelFailed, OnPlayerHit, OnPlayerFallingDown;
         public event Action OnActivateColorGate;
@@ -36,7 +36,6 @@ namespace Aftab
 
         public void ManageActivateGateOpening(bool allow, ColorGate colorGate)
         {
-            IsAllowedInputForGateOpening = allow;
             currentColorGate = colorGate;
             OnActivateColorGate?.Invoke();
         }
@@ -66,7 +65,6 @@ namespace Aftab
 
         void ResetGateOpeningAndCurrentColorGate()
         {
-            IsAllowedInputForGateOpening = false;
             currentColorGate = null;
         }
 
@@ -99,14 +97,12 @@ namespace Aftab
         void ManageLevelComplete()
         {
             IsLevelCompleted = true;
-            IsAllowedInputForGateOpening = false;
             OnLevelCompleted?.Invoke();
         }
 
         void ManageLevelFailed()
         {
             IsLevelFailed = true;
-            IsAllowedInputForGateOpening = false;
             //Camshake
             //Destroy ball. Make ball broken in pieces
             OnLevelFailed?.Invoke();

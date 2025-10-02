@@ -12678,9 +12678,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1869699323}
   - component: {fileID: 1869699326}
-  - component: {fileID: 1869699327}
-  - component: {fileID: 1869699324}
   - component: {fileID: 1869699330}
+  - component: {fileID: 1869699327}
   - component: {fileID: 1869699329}
   - component: {fileID: 1869699328}
   m_Layer: 0
@@ -12706,28 +12705,6 @@ Transform:
   - {fileID: 745201488}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1869699324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1869699322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 555cc311906d4b04cb23714558bb4d8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainBodyRB: {fileID: 745201492}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  forwardSpeed: 20
-  sideSpeed: 10
-  jumpSpeed: 15
-  playerRenderer: {fileID: 7220337890078220436}
-  trailRenderer: {fileID: 1079066466}
-  playerColor: {r: 0.09803922, g: 0.44313726, b: 0.9490196, a: 1}
 --- !u!114 &1869699326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12754,6 +12731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   brokenPiecesParentGO: {fileID: 6726515002923903614, guid: 6e9a7764ecccfa94ea995e2e535deb08, type: 3}
+  playerVisualHandler: {fileID: 1869699329}
 --- !u!114 &1869699328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12779,6 +12757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 484dda5bc33a4e244ad98201dffbbc81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ballMainBodyTr: {fileID: 745201488}
   playerRenderer: {fileID: 7220337890078220436}
 --- !u!114 &1869699330
 MonoBehaviour:

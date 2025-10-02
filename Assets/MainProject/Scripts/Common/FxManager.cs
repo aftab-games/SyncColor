@@ -40,14 +40,14 @@ namespace Aftab
 
         void PlayBallBreakFx()
         {
-            ballBreakFx.transform.position = PlayerController.Instance.GetBallTransform().position;
+            ballBreakFx.transform.position = GameManager.Instance.BallMainBodyTr.position;
             ballBreakFx.gameObject.SetActive(true);
             ballBreakFx.Play();
         }
 
         void PlaySoulEscapeFx()
         {
-            soulEscapeFx.transform.position = PlayerController.Instance.GetBallTransform().position;
+            soulEscapeFx.transform.position = GameManager.Instance.BallMainBodyTr.position;
             soulEscapeFx.gameObject.SetActive(true);
             soulEscapeFx.Play();
         }
