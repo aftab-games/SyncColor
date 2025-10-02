@@ -165,11 +165,10 @@ namespace Aftab
             void SideWiseMovementMove()
             {
                 if (!CanMoveSideWise()) return;
-
                 Vector3 trgtPos = mainBodyRB.position;
                 
-                trgtPos.x = Mathf.Clamp(Mathf.SmoothDamp(trgtPos.x, trgtPos.x + moveInput.x * 5,
-                    ref currVel, 0.2f, 100, Time.fixedDeltaTime), -boundX, boundX); //trgtPos.x = Mathf.Clamp(Mathf.MoveTowards(trgtPos.x, trgtPos.x + moveInput.x, sideSpeed * Time.fixedDeltaTime), -boundX, boundX);
+                trgtPos.x = Mathf.Clamp(Mathf.SmoothDamp(mainBodyRB.position.x, trgtPos.x + moveInput.x,
+                    ref currVel, 0.075f, 100, Time.fixedDeltaTime), -boundX, boundX); //trgtPos.x = Mathf.Clamp(Mathf.MoveTowards(trgtPos.x, trgtPos.x + moveInput.x, sideSpeed * Time.fixedDeltaTime), -boundX, boundX);
 
                 //Debug.Log($"CurrVel: {currVel} , MaxSpeed: {sideSpeed}");
                 mainBodyRB.MovePosition(trgtPos);
