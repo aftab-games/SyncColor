@@ -4,12 +4,16 @@ namespace Aftab
 {
     public class PlayerTrailHandler : MonoBehaviour
     {
+        [Header("Settings:")]
         [SerializeField]
         TrailRenderer trailRenderer;
+        [SerializeField]
+        GateKeySO initialGateKeySO;
 
         private void Start()
         {
             GameManager.Instance.OnChooseColorOption += OnChooseColorOption;
+            SetTrailColor(initialGateKeySO.GateColor);
         }
 
         private void OnDisable()

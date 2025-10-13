@@ -4,16 +4,20 @@ namespace Aftab
 {
     public class PlayerVisualHandler : MonoBehaviour
     {
+        [Header("Settings:")]
         [SerializeField]
         Transform ballMainBodyTr;
         [SerializeField]
         Renderer playerRenderer;
+        [SerializeField]
+        GateKeySO initialGateKeySO;
         Color bodyCurrentColor;
 
         private void Start()
         {
             GameManager.Instance.BallMainBodyTr = ballMainBodyTr;
             GameManager.Instance.OnChooseColorOption += OnChooseColorOption;
+            SetBodyColor(initialGateKeySO.GateColor);
         }
 
         private void OnDisable()
@@ -31,9 +35,9 @@ namespace Aftab
             if (playerRenderer != null)
             {
                 MaterialPropertyBlock mpBlock = new MaterialPropertyBlock();
-                playerRenderer.GetPropertyBlock(mpBlock, 0);
+                playerRenderer.GetPropertyBlock(mpBlock); //playerRenderer.GetPropertyBlock(mpBlock, 0);
                 mpBlock.SetColor("_BaseColor", color);
-                playerRenderer.SetPropertyBlock(mpBlock, 0);
+                playerRenderer.SetPropertyBlock(mpBlock);
                 bodyCurrentColor = color;
             }
         }

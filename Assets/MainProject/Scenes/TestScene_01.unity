@@ -3923,7 +3923,7 @@ PrefabInstance:
     - target: {fileID: 3399476323868408928, guid: 96347d6a38ed30d4789055e3e5cf828b, type: 3}
       propertyPath: gateKeySO
       value: 
-      objectReference: {fileID: 11400000, guid: c59ed1b134910884b8b31acd173fce3b, type: 2}
+      objectReference: {fileID: 11400000, guid: 92ef9abfa55c17e49896e228bed22e12, type: 2}
     - target: {fileID: 3399476323868408928, guid: 96347d6a38ed30d4789055e3e5cf828b, type: 3}
       propertyPath: gateColor.b
       value: 0.49019608
@@ -12190,6 +12190,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 165004393}
     m_Modifications:
+    - target: {fileID: 3399476323868408928, guid: 96347d6a38ed30d4789055e3e5cf828b, type: 3}
+      propertyPath: gateKeySO
+      value: 
+      objectReference: {fileID: 11400000, guid: c59ed1b134910884b8b31acd173fce3b, type: 2}
     - target: {fileID: 5870065448468523651, guid: 96347d6a38ed30d4789055e3e5cf828b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -12745,6 +12749,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trailRenderer: {fileID: 1079066466}
+  initialGateKeySO: {fileID: 11400000, guid: 92ef9abfa55c17e49896e228bed22e12, type: 2}
 --- !u!114 &1869699329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12759,6 +12764,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ballMainBodyTr: {fileID: 745201488}
   playerRenderer: {fileID: 7220337890078220436}
+  initialGateKeySO: {fileID: 11400000, guid: 92ef9abfa55c17e49896e228bed22e12, type: 2}
 --- !u!114 &1869699330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13033,7 +13039,7 @@ PrefabInstance:
     - target: {fileID: 3399476323868408928, guid: 96347d6a38ed30d4789055e3e5cf828b, type: 3}
       propertyPath: gateKeySO
       value: 
-      objectReference: {fileID: 11400000, guid: 92ef9abfa55c17e49896e228bed22e12, type: 2}
+      objectReference: {fileID: 11400000, guid: b4a59fd9302b4774998bc1f214071462, type: 2}
     - target: {fileID: 3399476323868408928, guid: 96347d6a38ed30d4789055e3e5cf828b, type: 3}
       propertyPath: gateColor.b
       value: 0.9490196
@@ -29003,6 +29009,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 165004393}
     m_Modifications:
+    - target: {fileID: 3399476323868408928, guid: 96347d6a38ed30d4789055e3e5cf828b, type: 3}
+      propertyPath: gateKeySO
+      value: 
+      objectReference: {fileID: 11400000, guid: c59ed1b134910884b8b31acd173fce3b, type: 2}
     - target: {fileID: 5870065448468523651, guid: 96347d6a38ed30d4789055e3e5cf828b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
