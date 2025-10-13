@@ -39,22 +39,19 @@ namespace Aftab
         void OnTriggerEnter(Collider other)
         {
             if (!shouldHandleCollision) return;
-            if (other.gameObject.CompareTag("Gate")) //Activator is trigger
+            if (other.gameObject.CompareTag("Gate"))
             {
                 if (other.TryGetComponent<ColorGate>(out ColorGate colorGate))
                 {
-                    Debug.Log("Gate triggered");
                     colorGate.ActivateGate();
                 }
             }
             else if (other.gameObject.CompareTag("LevelEnd"))
             {
-                Debug.Log("Level End triggered");
                 GameManager.Instance.PlayerReachedAtLevelEnd();
             }
             else if (other.gameObject.CompareTag("FallingDownTrigger"))
             {
-                Debug.Log("Falling Down Triggered");
                 GameManager.Instance.PlayerFallingDown();
             }
         }
@@ -62,14 +59,12 @@ namespace Aftab
         void OnCollisionEnter(Collision collision)
         {
             if (!shouldHandleCollision) return;
-            if (collision.gameObject.CompareTag("Gate")) //Main gate is collider
+            if (collision.gameObject.CompareTag("Gate"))
             {
-                Debug.Log("Gate Hit");
                 GameManager.Instance.PlayerCollideWithGate();
             }
             else if (collision.gameObject.CompareTag("Obstacles"))
             {
-                Debug.Log("Obstacle Hit");
                 GameManager.Instance.PlayerCollideWithObstacle();
             }
         }

@@ -15,8 +15,6 @@ namespace Aftab
         [SerializeField]
         float forwardSpeed = 20.0f;
         [SerializeField]
-        float sideSpeed = 10.0f;
-        [SerializeField]
         float jumpSpeed = 15.0f;
         float distancefromGround;
         bool canMove = false;

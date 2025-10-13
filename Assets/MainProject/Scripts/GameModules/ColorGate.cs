@@ -8,7 +8,7 @@ namespace Aftab
         [SerializeField]
         GateKeySO gateKeySO;
         [SerializeField]
-        Renderer renderer;
+        Renderer gateRenderer;
         [SerializeField]
         Collider gateActivatorTrigger;
         [SerializeField]
@@ -20,7 +20,7 @@ namespace Aftab
 
         void Start()
         {
-            renderer.material.color = gateKeySO.GateColor; //TODO: Need to optimize it by accesing shader property to change color of the material not instantiated material
+            gateRenderer.material.color = gateKeySO.GateColor; //TODO: Need to optimize it by accesing shader property to change color of the material not instantiated material
         }
 
         public void ActivateGate()

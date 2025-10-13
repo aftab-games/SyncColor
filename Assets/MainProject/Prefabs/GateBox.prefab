@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gateKeySO: {fileID: 11400000, guid: b4a59fd9302b4774998bc1f214071462, type: 2}
-  renderer: {fileID: 1247226534509994586}
+  gateRenderer: {fileID: 1247226534509994586}
   gateActivatorTrigger: {fileID: 9068698791795011695}
   gateCollider: {fileID: 642531780951503623}
   gateTransform: {fileID: 8915819685459126287}
