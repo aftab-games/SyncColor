@@ -1,7 +1,8 @@
-using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using System.Threading;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -51,8 +52,8 @@ namespace Aftab
         [SerializeField]
         Transform gateOpenerCountDownTr;
         bool isGateOpenerActivated = false;
-        CancellationTokenSource cncltnTknSrc;
-
+        CancellationTokenSource cts;
+        
         //UI Tool Kit
         [Header("UIToolKit Settings:")]
         [SerializeField]
@@ -115,7 +116,7 @@ namespace Aftab
             retryButton.clicked += () => ManageTappedRetryBtn();
             // Initial state
             //root.style.display = DisplayStyle.Flex;
-            ShowPanel(startPanel);
+            ShowPanel(startPanel, 0.05f);
             //End of UiToolKit
         }
 
@@ -158,10 +159,10 @@ namespace Aftab
             //Activate countdown with resetting for 3 seconds
             //ActivateCountDown();
             //Activate countdown in a async await or coroutine eventually in UniTask
-            StartCountDown();
-            async void StartCountDown()
+            ManageCountDown();
+            async void ManageCountDown()
             {
-                cncltnTknSrc = new CancellationTokenSource();
+                cts = new CancellationTokenSource();
 
                 try
                 {
@@ -169,7 +170,7 @@ namespace Aftab
                     {
                         gateOpenerCountDownTMP.text = Mathf.CeilToInt(countDownDuration).ToString();
                         gateOpenerCountDownTr.DOPunchScale(Vector3.one * 0.3f, 0.3f);
-                        await Awaitable.WaitForSecondsAsync(1f, cncltnTknSrc.Token); // Wait for 1 second
+                        await UniTask.Delay(TimeSpan.FromSeconds(1f), cancellationToken: cts.Token); // Wait for 1 second
                         countDownDuration--;
                     }
                 }
@@ -180,6 +181,7 @@ namespace Aftab
                 }
                 finally
                 {
+                    //TODO: Need to fix and solve this whole finally block. I mean check cts cancel, ManageDecativateGateBox, etc.
                     if (isGateOpenerActivated)
                     {
                         //Deactivate box
@@ -187,7 +189,7 @@ namespace Aftab
                         //Resume player movement
                         gameManager.ManageDeactivatedColorGateWithoutChooseOption();
                     }
-                    cncltnTknSrc.Dispose();
+                    cts.Dispose();
                 }
             }
         }
@@ -200,7 +202,7 @@ namespace Aftab
             {
                 button.interactable = false;
             }
-            cncltnTknSrc?.Cancel();
+            cts?.Cancel();
             gateOpenerBoxTr.DOScale(0, 0.3f).SetEase(Ease.InBack).OnComplete(()=> gateOpenerGO.SetActive(false));
         }
 
@@ -280,30 +282,28 @@ namespace Aftab
 
         //UI Tool Kit
         // ========= Fade Helpers =========
-        void ShowPanel(VisualElement panel)
+        void ShowPanel(VisualElement panel, float fadeInTime = 0.75f)
         {
             panel.style.display = DisplayStyle.Flex;
             panel.style.opacity = 0f;
-
-            // Delay 1 frame before fade (UI Toolkit quirk)
-            _ = FadeIn(panel);
+            _ = FadeIn(panel, fadeInTime); //Used discard (_ =), because we are not awaiting for this
         }
 
-        void HidePanel(VisualElement panel)
+        void HidePanel(VisualElement panel, float fadeOutTime = 0.1f)
         {
-            _ = FadeOut(panel);
+            _ = FadeOut(panel, fadeOutTime);
         }
 
-        async Awaitable FadeIn(VisualElement panel)
+        async UniTask FadeIn(VisualElement panel, float fadeInTime) //We could use UniTask or UniTask<T> instad of void if we wanted to return something
         {
-            await Awaitable.NextFrameAsync(); //Wait 1 frame
+            await UniTask.Delay(TimeSpan.FromSeconds(fadeInTime)); //Wait 2 frame/ We can use Unitask.NextFrame like yield return null.
             panel.style.opacity = 1f;
         }
 
-        async Awaitable FadeOut(VisualElement panel)
+        async UniTask FadeOut(VisualElement panel, float fadeOutTime)
         {
             panel.style.opacity = 0f;
-            await Awaitable.WaitForSecondsAsync(0.4f); // matches USS transition-duration
+            await UniTask.Delay(TimeSpan.FromSeconds(fadeOutTime)); //await UniTask.Delay(TimeSpan.FromSeconds(10), ignoreTimeScale: false);
             panel.style.display = DisplayStyle.None;
         }
     }
