@@ -28,7 +28,7 @@ namespace Aftab
         }
         void ManageLevelCompleted()
         {
-            winFx.transform.position = LevelEndSystem.Instance.transform.position + Vector3.up * 11;
+            winFx.transform.position = LevelEndSystem.Instance.transform.position + Vector3.up * 13;
             winFx.gameObject.SetActive(true);
             Invoke(nameof(PlayWinFx), 0.1f);
         }
